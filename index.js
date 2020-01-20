@@ -1,0 +1,35 @@
+var express=require("express")
+var path=require("path") 
+var app=express()
+
+var searchRouter=require(path.join(__dirname,"router/search.js"))
+var loginRouter=require(path.join(__dirname,"router/login.js"))
+/*configure template engine */
+app.engine("html",require("express-art-template"))
+// open static resource 
+app.use("/public",express.static(path.resolve(__dirname,"public")))
+app.use("/node_modules",express.static(path.resolve(__dirname,"node_modules")))
+/* home page render */
+app.get("/",function(req,rep){
+  rep.render("index.html")
+})
+
+/*mount router */
+app.use(searchRouter)
+app.use(loginRouter)
+
+/*########################*/
+//err page
+app.use(function(err,req,rep,next){
+
+  rep.status(200).send("error code:"+err.errCode);
+})
+//404 page
+app.use(function(req,rep){
+  rep.status(400).render("404.html")
+})
+/*########################*/
+
+app.listen(80,function(){
+  console.log("web server is init successful")
+})
