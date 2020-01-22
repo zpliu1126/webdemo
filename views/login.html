@@ -74,20 +74,20 @@ form button[type="submit"]:hover{
             Weclome To Github
         </div>
             <div class="card-body">
-              <form action="http://www.zpliublog.club:8080/API/" method="GET">
+              <form action="/login" method="post">
                   <div class="form-group">
                       <label for="">
                        Account
                       </label>
-                        <input type="text" class="form-control" required placeholder="Tel phone number or email">
+                        <input type="text" class="form-control" name="name" required placeholder="Tel phone number or email">
                     </div>
                     <div class="form-group">
                       <label for="">
                         password
                       </label>
-                        <input type="password" class="form-control" required placeholder="At least five character">
+                        <input type="password" class="form-control" name="password" required placeholder="At least five character">
                     </div>
-                    <button  class="form-control btn" type="submit" style="">login</button>
+                    <button  class="form-control btn" type="submit" >login</button>
               </form>
             </div>
           </div>
