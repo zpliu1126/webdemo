@@ -1,12 +1,10 @@
 var express=require("express")
 var path=require("path")
 var md5=require("md5")
-var errorCategory=require(path.resolve(__dirname+"/../include/error.js"))
 var router=express.Router()
-var poolConnection=require(path.resolve(__dirname+"/../include/mysql_config.js")).poolConnection
-
+var authenticateMethods=require(path.resolve(__dirname+"/../modules/authenticate.js"))
 router.get("/login",function(req,rep,next){
-  isLogin(req,function(err,result){
+  authenticateMethods.isLogin(req,function(err,result){
     if(err){
       next(err)
       return
@@ -20,9 +18,9 @@ router.get("/login",function(req,rep,next){
 })
 /*login Verification*/
 router.post("/login",function(req,rep,next){
-  account=req.body.name
-  password=md5(req.body.password)
-  authenticateAccount(account,password,function(err,result){
+  account=req.body.name.trim()
+  password=md5(req.body.password.trim())
+  authenticateMethods.authenticateAccount(account,password,function(err,result){
     if(err){
      next(err)
      return ;
@@ -38,7 +36,7 @@ router.post("/login",function(req,rep,next){
 })
 
 router.get("/profile",function(req,rep,next){
-    isLogin(req,function(err,result){
+  authenticateMethods.isLogin(req,function(err,result){
       if(err){
         next(err)
         return
@@ -56,33 +54,7 @@ router.get("/logout",function(req,rep,next){
   rep.redirect("/")
 })
 
-/*some methods to process authenticate login and logout */
-function authenticateAccount(account,password,callback){
-  poolConnection.getConnection(function(err,connection){
-    if(err){
-      callback(errorCategory.mysql.connection) //error category
-      return ;
-    }
-    //verification
-    sql='SELECT * FROM `user` WHERE `name`=? and `password`=?'
-    connection.query(sql,[account,password],function(err,result,fields){
-      if(err){
-        callback(errorCategory.mysql.sql) //error category
-        return ;
-      }
-      connection.release();
-      callback(null,result)
-    })
-  })
-}
 
-function isLogin(req,callback){
-  if(req.cookies.account==null){
-    callback(null,0);
-    return
-  }
-  authenticateAccount(req.cookies.account.name,req.cookies.account.password,callback)
-}
 
 
 module.exports=router
