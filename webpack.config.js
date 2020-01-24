@@ -20,7 +20,10 @@ module.exports={
       },
       {
         test:/\.js$/,loader:'babel-loader'
-      }
+      },{
+        test:/\.css$/,
+        use:[{loader:'vue-style-loader'},{loader: 'css-loader'}]
+      },
     ]
   },
 
@@ -29,7 +32,7 @@ module.exports={
   ],
   mode: 'development',
   devServer:{
-    port:80,
+    port:81,
 		host:'0.0.0.0',
 		disableHostCheck: true,
 		contentBase:path.join(__dirname,"/views"), //热重载模式下根文件
