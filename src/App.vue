@@ -1,18 +1,11 @@
 <template>
-  <div class="content">
-    {{name}}
-  </div>
+<router-view></router-view>
 </template>
-
 <script>
   export default{
-    data() {
-      return {
-        name:"zpliu"
-      }
-    },
+
   }
 </script>
 <style>
-
+ 
 </style>

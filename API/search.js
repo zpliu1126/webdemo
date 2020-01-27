@@ -8,13 +8,13 @@ var primerDataMethods=require(path.resolve(__dirname+"/../modules/primerData.js"
 
 /*首页关键字查询*/
 router.post("/",function(req,rep,next){
-  keyword=req.body.keyword;
+  keyword=req.body.keyword.trim(); //需要去除空格
   primerDataMethods.searchByKeyword(keyword,function(err,result){
     if(err){
       next(err)
       return
     }
-    rep.send(result)
+    rep.status(200).send(result)
   })
 })
 

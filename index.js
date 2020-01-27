@@ -3,12 +3,12 @@ var path=require("path")
 var app=express()
 var bodyParser=require("body-parser")
 
-var searchRouter=require(path.join(__dirname,"router/search.js"))
-var loginRouter=require(path.join(__dirname,"router/login.js"))
+var searchRouter=require(path.join(__dirname,"API/search.js"))
+var loginRouter=require(path.join(__dirname,"API/login.js"))
 
 var cookieParser=require("cookie-parser")
-app.use(bodyParser.urlencoded({extened :false}))
 app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extened :false}))
 
 app.use(cookieParser())
 /*configure template engine */
@@ -23,6 +23,11 @@ app.get("/",function(req,rep){
   rep.render("index.html")
 })
 
+app.all("*",function(req,rep,next){
+  rep.header("Access-Control-Allow-Origin", "*");
+  rep.header("Access-Control-Allow-Headers", "*");
+  next();
+})
 /*mount router */
 app.use(searchRouter)
 app.use(loginRouter)
@@ -39,7 +44,7 @@ app.use(function(err,req,rep,next){
 })
 //404 page
 app.use(function(req,rep){
-  rep.status(400).render("404.html")
+  rep.status(404).render("404.html")
 })
 /*########################*/
 
