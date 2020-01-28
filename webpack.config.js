@@ -1,5 +1,10 @@
-var path=require("path")
+const path=require("path")
+const webpack = require('webpack');
 const VueLoaderPlugin = require(path.join(__dirname,'node_modules/vue-loader/lib/plugin'))
+const ExtractTextPlugin=require("extract-text-webpack-plugin")
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin') 
+const CompressionPlugin = require('compression-webpack-plugin')
+
 module.exports={
   entry: path.join(__dirname,"/src/main.js"),
 
@@ -19,10 +24,14 @@ module.exports={
         loader:'vue-loader'
       },
       {
-        test:/\.js$/,loader:'babel-loader'
+        test:/\.js$/,exclude: /node_modules/,loader:'babel-loader'
       },{
         test:/\.css$/,
-        use:[{loader:'vue-style-loader'},{loader: 'css-loader'}]
+        use:ExtractTextPlugin.extract({
+          fallback: "vue-style-loader",
+          use: "css-loader"
+        })
+
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2)$/,
@@ -32,8 +41,33 @@ module.exports={
   },
 
   plugins:[
-    new VueLoaderPlugin()
-  ],
+    new VueLoaderPlugin(),
+    new ExtractTextPlugin("styles.css"),
+    new UglifyJsPlugin({
+      parallel: 4,
+      uglifyOptions: {
+          output: {
+              comments: false,
+              beautify: false,
+          }, 
+      },
+      sourceMap:false,
+      cache: true,
+  }),
+  new CompressionPlugin({
+    // asset: '[path].gz[query]',
+    algorithm: 'gzip',
+    test: new RegExp(
+      '\\.(js)$' 
+    ),
+    threshold: 10240,
+    minRatio: 0.8}),
+  new webpack.DefinePlugin({
+      "process.env":{
+        NODE_ENV:JSON.stringify('production')
+       }
+    })
+],
   mode: 'development',
   devServer:{
     port:81,

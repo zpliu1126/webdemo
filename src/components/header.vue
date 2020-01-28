@@ -23,7 +23,7 @@ export default {
   },
 }
 </script>
-<style>
+<style scoped>
 .el-menu::after, .el-menu::before{
   display: none;
   content: unset;

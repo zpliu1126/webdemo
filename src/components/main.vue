@@ -52,18 +52,15 @@ export default {
       this.$http.post(httpUrl+"/",formData,{emulateJSON: true}).then(
         //success reponse
         (reponse)=>{
-          console.log(reponse.body)     
+          this.$emit('seach-bykeword',reponse.body)    
       },
       //failed reponse
       (reponse)=>{alert("somethings error!")})
-    }
+    } 
   },
 }
 </script>
-
-
-
-<style>
+<style scoped>
  .el-main .el-row{
    height: 100%;
    align-items: center;

@@ -21,5 +21,4 @@ var app=new Vue({
   data:{'a':1},
   render:h=>h(App),
   router:router, //mount router
-
 })

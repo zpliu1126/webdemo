@@ -24,7 +24,7 @@
     },
   }
   </script>
-  <style>
+  <style scoped>
     .el-footer{
       margin-bottom: 20px;
     }
