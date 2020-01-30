@@ -1,12 +1,9 @@
 <template>
-<div class="container">
   <el-container  direction="vertical">
     <headerComponents></headerComponents>
     <mainComponents v-on:seach-bykeword="onGetData"></mainComponents>
     <footerComponents></footerComponents>
   </el-container>
-  <router-view></router-view>
-</div>
 </template>
 <script>
 import mainComponents from "./../main.vue"
@@ -19,28 +16,28 @@ import headerComponents from "./../header.vue"
       headerComponents,
     },
     methods: {
-      onGetData(result){
-        console.log(result)
+      onGetData(reponse){
+        if(reponse.errCode){
+          //后台出错了
+          this.$router.push({name:"errorPage",params:{"errorMessage":reponse}});
+        }else{
+          //传递返回数据和关键字
+          this.$router.push({name:"showData",params:{"reponsData":reponse.result,"searchKeyword":reponse.keyword}});
+        }
       }
     },
   }
 </script>
-<style>
- html{
-    min-height: 100%;
+<style scoped>
+  body > .el-container{
     height: 100%;
-  }
-  body{
-    margin: 0;
-    padding: 0;
     width: 100%;
-    min-height: 100%;
-    height: 100%;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    margin-left: 0px;
   }
-  body > .container{
-    height: 100%;
-  }
-  .container .el-container{
+.el-container{
     height: 100%;
     background-image: url(https://imgchr.com/content/images/system/home_cover_1552414407320_3a5f92.jpg);
     background-repeat: repeat;

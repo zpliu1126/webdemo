@@ -52,7 +52,7 @@ export default {
       this.$http.post(httpUrl+"/",formData,{emulateJSON: true}).then(
         //success reponse
         (reponse)=>{
-          this.$emit('seach-bykeword',reponse.body)    
+          this.$emit('seach-bykeword',{"result":reponse.body,"keyword":this.input.keyword})    
       },
       //failed reponse
       (reponse)=>{alert("somethings error!")})

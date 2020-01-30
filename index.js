@@ -36,11 +36,16 @@ app.use(loginRouter)
 //err page
 app.use(function(err,req,rep,next){
 
-  rep.status(200).render(path.join(__dirname,"views/err.html"),{
+  // rep.status(200).render(path.join(__dirname,"views/err.html"),{
+  //   "errCode":err.errCode,
+  //   errMessage:err.errMessage,
+  //   email:'1944532210@qq.com'
+  // });
+  rep.status(200).send({
     "errCode":err.errCode,
     errMessage:err.errMessage,
     email:'1944532210@qq.com'
-  });
+  })
 })
 //404 page
 app.use(function(req,rep){
