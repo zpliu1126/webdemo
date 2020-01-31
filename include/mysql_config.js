@@ -1,8 +1,8 @@
 var mysql=require("mysql")
 var mysqlConfigure={
   host:"localhost",
-  user:'zpliu',
-  password:"123456",
+  user:'BioCotton',
+  password:"BioCotton39558728cotton@",
   port:'3306',
   database:'Bioinformatic'
 }
