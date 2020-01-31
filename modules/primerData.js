@@ -127,6 +127,7 @@ function insertItem(post,callback){
 function searchByKeyword(keyword ,callback){
   poolConnection.getConnection(function(err,connection){
     if(err){
+      console.log(err)
       callback(errorCategory.mysql.connection)
       return
     }
