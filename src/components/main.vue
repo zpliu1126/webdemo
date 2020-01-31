@@ -4,8 +4,8 @@
       <el-col :span="24">
        <el-form :model="input" status-icon :rules="rules" ref="input">
          <el-form-item prop="keyword">
-           <el-input size="large" v-model="input.keyword" type="text" >
-            <el-button  @click="onSubmit('input')" slot="append" icon="el-icon-search"></el-button>
+           <el-input size="large"  v-model="input.keyword" type="text" >
+            <el-button  @click="onSubmit('input')"  slot="append" icon="el-icon-search"></el-button>
            </el-input>
          </el-form-item>
          <el-form-item label="Accurate Search" prop="rule">

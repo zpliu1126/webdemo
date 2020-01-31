@@ -7,8 +7,8 @@
   <el-col class="hidden-sm-and-down"  :span="8" :offset="4" >
   <el-menu :default-active="activeIndex" mode="horizontal"
     text-color="#fff" active-text-color="#ffd04b" >
-    <el-menu-item index="1"><el-button icon="el-icon-s-home" round>Home</el-button></el-menu-item>
-    <el-menu-item index="2" ><el-button  icon="el-icon-s-promotion" round>Login</el-button></el-menu-item>
+    <el-menu-item index="1"><router-link to="/"><el-button icon="el-icon-s-home" round>Home</el-button></router-link></el-menu-item>
+    <el-menu-item index="2"><router-link to="/login"><el-button  icon="el-icon-s-promotion" round>Login</el-button></router-link></el-menu-item>
  </el-menu>
 </el-col>
   </el-row>
@@ -16,11 +16,7 @@
 </template>
 <script>
 export default {
-  data() {
-    return {
-      "activeIndex":'1',
-    }
-  },
+  props:["activeIndex",],
 }
 </script>
 <style scoped>

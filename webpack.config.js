@@ -70,7 +70,7 @@ module.exports={
 ],
   mode: 'development',
   devServer:{
-    port:81,
+    port:80,
 		host:'0.0.0.0',
 		disableHostCheck: true,
 		contentBase:path.join(__dirname,"/views"), //热重载模式下根文件

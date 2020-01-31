@@ -65,25 +65,28 @@ body > .el-container[data-v-c2ce7532]{
     background-size: cover;
 }
 
-body >.el-container[data-v-3b35cf42]{
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0px;
-    bottom: 0px;
-    margin-left: 0px;
-    background-color:#16a085 ;
+body>.el-container[data-v-3b35cf42] {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  margin-left: 0px;
+  background-color: #16a085;
 }
-.el-container >.el-main[data-v-3b35cf42]{
-      border: red 1px solid;
-      height: 100%;
-      width: 100%;
-      position: relative;
-      top: 0px;
-      bottom: 0px;
+.el-container>.el-main[data-v-3b35cf42] {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  top: 0px;
+  bottom: 0px;
 }
-.el-main > .emptyResponse[data-v-3b35cf42]{
-background-color: red;
+.el-main .result-keyword[data-v-3b35cf42]{
+ margin-bottom: 10px;
+}
+.el-main .result-page[data-v-3b35cf42]{
+  display: flex;
+  justify-content: center;
 }
 
 body[data-v-3b4238c6]{
@@ -108,4 +111,60 @@ img[data-v-3b4238c6]{
       font-size: 20px;
       margin-right: 10px;
       background-color:#e74c3c ;
+}
+
+#loginContainer[data-v-6840687e] {
+    color: white;
+    height: 100vh;
+    border-top: solid 2px darkred;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: center;
+    align-items:center;
+    background: rgb(41, 45, 62) url(http://cotton.hzau.edu.cn/primer/public/img/20190921231830.svg);
+    background-repeat: repeat-y;
+    background-size:cover;
+}
+.form-group[data-v-6840687e]{
+    min-height: 100px;
+}
+form input[type="text"][data-v-6840687e], input[type="password"][data-v-6840687e]{
+    border:none;
+    border-bottom: solid 2px red;
+    width: 100%;
+    height: 40px;
+    padding:10px;
+    transform: border-bottom 0.5s;
+}
+form input[type="text"][data-v-6840687e]:focus, input[type="password"][data-v-6840687e]:focus{
+    border-bottom:solid 2px blue;
+}
+form input[type="text"][data-v-6840687e]:hover, input[type="password"][data-v-6840687e]:hover{
+    border-bottom:solid 2px blue;
+}
+.form-group label[data-v-6840687e]{
+    font-size: 20px;
+}
+button.form-control[data-v-6840687e]{
+    background: #fafafa;
+    border: none;
+    border-radius: 0.6;
+}
+.card-header[data-v-6840687e]{
+    text-align: start;
+    font-size: 20px;
+    margin: 20px 0;
+}
+form button[type="submit"][data-v-6840687e]{
+    height: 40px;
+    width: 60px;
+    background-color:#67cd0a;
+    color: #fafafa;
+}
+form button[type="submit"][data-v-6840687e]:hover{
+    height: 40px;
+    width: 60px;
+    background-color:#cd170a;
+    color: #fafafa;
 }

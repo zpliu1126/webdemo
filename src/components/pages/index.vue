@@ -1,6 +1,6 @@
 <template>
   <el-container  direction="vertical">
-    <headerComponents></headerComponents>
+    <headerComponents active-index="1" ></headerComponents>
     <mainComponents v-on:seach-bykeword="onGetData"></mainComponents>
     <footerComponents></footerComponents>
   </el-container>
