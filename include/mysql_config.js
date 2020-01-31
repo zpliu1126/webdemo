@@ -4,7 +4,7 @@ var mysqlConfigure={
   user:'BioCotton',
   password:"BioCotton39558728cotton@",
   port:'3306',
-  database:'Bioinformatic'
+  database:'bioinformatic'
 }
 var oneConnection=mysql.createConnection(mysqlConfigure)
 var poolConnection=mysql.createPool(mysqlConfigure)
