@@ -1,95 +1,59 @@
 <template>
   <div id="loginContainer">
-    <headerComponents active-index="2" ></headerComponents>
-    <div class="card">
-    <div class="card-header">
-        Weclome To GCGI
-    </div>
-        <div class="card-body">
-          <form action="/login" method="post">
-              <div class="form-group">
-                  <label for="">
-                   Account
-                  </label>
-                    <input type="text" class="form-control" name="name" required placeholder="Tel phone number or email">
-                </div>
-                <div class="form-group">
-                  <label for="">
-                    password
-                  </label>
-                    <input type="password" class="form-control" name="password" required placeholder="At least five character">
-                </div>
-                <button  class="form-control btn" type="submit" >login</button>
-          </form>
-
-        </div>
-      </div>
-    </div>
+    <headerComponents active-index="2"></headerComponents>
+    <el-row :span="24" justify="center" type="flex">
+      <el-col :span="24">
+        <el-form status-icon ref="input">
+          <el-form-item>
+            <el-input size="large" type="text">
+              <el-button slot="append" icon="el-icon-search"></el-button>
+            </el-input>
+          </el-form-item>
+          <el-form-item prop="rule">
+            <el-input size="large" type="text">
+              <el-button slot="append" icon="el-icon-search"></el-button>
+            </el-input>
+          </el-form-item>
+        </el-form>
+      </el-col>
+    </el-row>
+    <footerComponents></footerComponents>
   </div>
 </template>
 <script>
-import headerComponents from "./../header.vue"
-export default{
-  components:{
-    headerComponents,
+  import headerComponents from "./../header.vue"
+  import footerComponents from "./../footer.vue"
+  export default {
+    components: {
+      headerComponents,
+      footerComponents,
+    }
   }
-}
 </script>
 <style scoped>
   #loginContainer {
-    color: white;
-    height: 100vh;
-    border-top: solid 2px darkred;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    justify-content: center;
-    align-items:center;
-    background: rgb(41, 45, 62) url(http://cotton.hzau.edu.cn/primer/public/img/20190921231830.svg);
-    background-repeat: repeat-y;
-    background-size:cover;
-
-  }
-  .form-group{
-    min-height: 100px;
-  }
-  form input[type="text"], input[type="password"]{
-    border:none;
-    border-bottom: solid 2px red;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    height: 100%;
     width: 100%;
-    height: 40px;
-    padding:10px;
-    transform: border-bottom 0.5s;
+    margin-left: 0px;
+    background: rgb(41, 45, 62) url(http://cotton.hzau.edu.cn/primer/public/img/20190921231830.svg);
+    background-repeat: repeat;
+    background-size: cover;
+    border-top: 1px solid red;
   }
-  form input[type="text"]:focus, input[type="password"]:focus{
-    border-bottom:solid 2px blue;
+
+  #loginContainer .el-row {
+    height: 70%;
+    align-items: center;
   }
-  form input[type="text"]:hover, input[type="password"]:hover{
-    border-bottom:solid 2px blue;
+
+  #loginContainer .el-row .el-col {
+    display: inherit;
+    justify-content: center;
   }
-  .form-group label{
-    font-size: 20px;
-  }
-  button.form-control{
-    background: #fafafa;
-    border: none;
-    border-radius: 0.6;
-  }   
-  .card-header{
-    text-align: start;
-    font-size: 20px;
-    margin: 20px 0;
-  }
-form button[type="submit"]{
-    height: 40px;
-    width: 60px;
-    background-color:#67cd0a;
-    color: #fafafa;
-  }
-form button[type="submit"]:hover{
-    height: 40px;
-    width: 60px;
-    background-color:#cd170a;
-    color: #fafafa;
-  }
+
+
+ 
 </style>
