@@ -14,6 +14,15 @@ import App from "./App.vue"
 Vue.use(ElementUI)
 Vue.use(vueResourve)
 
+//title的设置
+router.beforeEach(
+  (to,from,next)=>{
+    if(to.meta.title){
+      document.title=to.meta.title
+    }
+    next();
+  }
+)
 
 var template=`<App></App>`
 var app=new Vue({

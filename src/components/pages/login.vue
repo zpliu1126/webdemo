@@ -71,9 +71,24 @@ import confVar from './../configure.js'
            this.$http.post(httpUrl+"login",this.input,{emulateJSON: true}).then(
         //success reponse
         (reponse)=>{
-          console.log(reponse)
+          if(reponse.body.errCode){ //后端数据库连接失败
+            this.$router.push({name:"errorPage",params:{errorMessage:reponse.body}})
+            return
+          }
+          if(reponse.body.authenticateThrought=="no"){
+            alert("账号或密码错误,请重试")
+            return
+          }
+          if(reponse.body.authenticateThrought==="yes"){
+            //认证成功，进入个人主页
+            this.$router.push({name:"profilePage",params:{name:this.input.name}})
+          }
         //  console.log(JSON.parse(reponse.body))    
-        })
+        },(errReponse)=>{
+          alert("网络似乎有点延迟，稍后再试")
+          return
+        }
+        )
           }
         });
       }

@@ -23,7 +23,6 @@ router.post("/login",function(req,rep,next){
   password=md5(req.body.password.trim())
   authenticateMethods.authenticateAccount(account,password,function(err,result){
     if(err){
-    console.log(err)
      rep.json(err) //交给前段路由进行处理
      return ;
     }
@@ -47,20 +46,56 @@ router.post("/login",function(req,rep,next){
     }
   })
 })
-
+/*login Verification*/
 // router.get("/profile",function(req,rep,next){
-//   authenticateMethods.isLogin(req,function(err,result){
-//       if(err){
-//         next(err)
-//         return
-//       }
-//       if(result==0){ //cookie修改之后resule为空也需要重新登录
-//         rep.redirect("/primer/login")
-//         return
-//       }
-//       rep.render("profile.html",{user:req.cookies.account.name})
-//     })
+  
+//   account=req.cookies.account.name
+//   password=req.cookies.account.password
+//   console.log(account)
+//   if(!account&&!password){
+//     console.log("SASA")
+   
+//     rep.json({"authenticateThrought":"no"});
+//     return
+//   }
+//   authenticateMethods.authenticateAccount(account,password,function(err,result){
+//     if(err){
+//      rep.json(err) //交给前段路由进行处理
+//      return ;
+//     }
+//     if(result!=false){
+//       //使用cookie认证成功
+//       rep.json({
+//         "authenticateThrought":"yes"
+//       })
+//       return
+//     }
+//     else{
+//       //cookie认证失败，需要重新登录
+//       rep.json({
+//         "authenticateThrought":"no"
+//       })
+//       return
+//     }
+//   })
 // })
+router.get("/profile",function(req,rep,next){
+  authenticateMethods.isLogin(req,function(err,result){
+      if(err){
+        next(err)
+        return
+      }
+      if(result==0){ //cookie修改之后resule为空也需要重新登录
+        rep.json({
+          "authenticateThrought":"no"
+        })
+        return
+      }
+      rep.json({
+        "authenticateThrought":"yes"
+      })
+    })
+})
 
 // router.get("/logout",function(req,rep,next){
 //   rep.clearCookie("account")
