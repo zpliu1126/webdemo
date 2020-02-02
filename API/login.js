@@ -23,39 +23,49 @@ router.post("/login",function(req,rep,next){
   password=md5(req.body.password.trim())
   authenticateMethods.authenticateAccount(account,password,function(err,result){
     if(err){
-     next(err)
+    console.log(err)
+     rep.json(err) //交给前段路由进行处理
      return ;
     }
     if(result!=false){
-      rep.cookie("account",{name:result[0].name,password:result[0].password},{maxAge:86400000*7})
-      rep.redirect("/primer/profile?"+result[0].name)
+      //domain解决反向代理设置cookie问题
+      rep.cookie(
+        "account",{name:result[0].name,password:result[0].password},
+        {
+          maxAge:86400000*7,
+        }
+      )
+      // rep.redirect("/primer/profile?"+result[0].name)
+      rep.json({
+        "authenticateThrought":"yes"
+      })
     }
     else{
-      rep.send("account or password error!")
+      rep.json({
+        "authenticateThrought":"no"
+      })
     }
   })
 })
 
-router.get("/profile",function(req,rep,next){
-  authenticateMethods.isLogin(req,function(err,result){
-      if(err){
-        next(err)
-        return
-      }
-      if(result==0){ //cookie修改之后resule为空也需要重新登录
-        rep.redirect("/primer/login")
-        return
-      }
-      rep.render("profile.html",{user:req.cookies.account.name})
-    })
-})
+// router.get("/profile",function(req,rep,next){
+//   authenticateMethods.isLogin(req,function(err,result){
+//       if(err){
+//         next(err)
+//         return
+//       }
+//       if(result==0){ //cookie修改之后resule为空也需要重新登录
+//         rep.redirect("/primer/login")
+//         return
+//       }
+//       rep.render("profile.html",{user:req.cookies.account.name})
+//     })
+// })
 
-router.get("/logout",function(req,rep,next){
-  rep.clearCookie("account")
-  rep.redirect("/primer")
-})
-
-
+// router.get("/logout",function(req,rep,next){
+//   rep.clearCookie("account")
+//   rep.redirect("/primer")
+// })
 
 
 module.exports=router

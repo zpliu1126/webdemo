@@ -4,8 +4,8 @@
     <el-row :span="24" justify="center" type="flex">
       <el-col :span="24">
         <el-form :model="input" :rules="loginFormRules" status-icon ref="loginInput" status-icon>
-          <el-form-item prop="account" >
-            <el-input type="text"v-model.trim="input.account" size="large"  class="el-input-prefix">
+          <el-form-item prop="name" >
+            <el-input type="text"v-model.trim="input.name" size="large"  class="el-input-prefix">
               <el-button slot="prepend">账户</el-button>
             </el-input>
           </el-form-item>
@@ -24,6 +24,8 @@
   </div>
 </template>
 <script>
+import confVar from './../configure.js' 
+  var httpUrl=confVar.httpUrl
   import headerComponents from "./../header.vue"
   import footerComponents from "./../footer.vue"
   export default {
@@ -44,7 +46,7 @@
       };
       return {
         input:{
-          account:'',
+          name:'',
           password:'',
         },
         loginButton:{
@@ -52,7 +54,7 @@
           "margin-left": "1%",
         },
         loginFormRules:{
-          account:[{validator:checkInputAccount,trigger:'blur'}],
+          name:[{validator:checkInputAccount,trigger:'blur'}],
           password:[{validator:checkInputPassowrd,trigger:'blur'}],
         }
       }
@@ -66,7 +68,12 @@
         this.$refs[ruleform].validate((valid) => {
           if (valid) {
            //success validate
-           alert("开始请求后台")
+           this.$http.post(httpUrl+"login",this.input,{emulateJSON: true}).then(
+        //success reponse
+        (reponse)=>{
+          console.log(reponse)
+        //  console.log(JSON.parse(reponse.body))    
+        })
           }
         });
       }

@@ -26,6 +26,7 @@ app.get("/",function(req,rep){
 app.all("*",function(req,rep,next){
   rep.header("Access-Control-Allow-Origin", "*");
   rep.header("Access-Control-Allow-Headers", "*");
+  rep.header("Access-Control-Allow-Credentials", "true");
   next();
 })
 /*mount router */
