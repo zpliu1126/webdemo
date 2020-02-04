@@ -1,5 +1,5 @@
 <template>
-  <el-footer height="15%">
+  <el-footer :height="height">
     <el-divider></el-divider>
     <el-row :span="24" justify="center">
       <el-col :span="20" :offset="2">
@@ -17,6 +17,11 @@
       right:"Huazhong Agricultural University. All rights reserved."
     }
   export default {
+    props:{
+      height:{
+        default:"15%",
+      },
+    },
     data() {
       return {
         "stateMent":stateMent
@@ -26,7 +31,7 @@
   </script>
   <style scoped>
     .el-footer{
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
     .el-footer .el-row{
       text-align: center;
@@ -37,5 +42,6 @@
     }
     .el-footer .el-col:last-child{
       margin-bottom: 0px;
+      padding-bottom: 10px;
     }
   </style>

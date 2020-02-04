@@ -8,7 +8,7 @@
     <el-row>
       <el-col :lg="24" :sm="24">
         <el-card>
-          <img width="25%" src="http://127.0.0.1/public/img/icon/node.svg" alt="">
+          <img width="25%" :src="nodeUrl" alt="">
           <div>
             <el-link type="success">Node.js</el-link>
             <p>
@@ -19,7 +19,7 @@
       </el-col>
       <el-col :lg="24" :sm="24">
         <el-card>
-            <img width="15%"  src="http://127.0.0.1/public/img/icon/vue.png" alt="">
+            <img width="15%"  :src="vueUrl" alt="">
             <div>
               <el-link type="success">Vue.js</el-link>
               <div>
@@ -33,7 +33,7 @@
       </el-col>
       <el-col :lg="24" :sm="24">
         <el-card>
-            <img width="25%"  src="http://127.0.0.1/public/img/icon/mysql.jpg" alt="">
+            <img width="25%"  :src="mysqlUrl" alt="">
             <div>
               <el-link type="success">mysql</el-link>
               <div>
@@ -64,6 +64,9 @@
     data() {
       return {
         ElementUIUrl:"http://cotton.hzau.edu.cn/primer/public/img/icon/element.svg",
+        mysqlUrl:"http://cotton.hzau.edu.cn/primer/public/img/icon/mysql.jpg",
+        vueUrl:"http://cotton.hzau.edu.cn/primer/public/img/icon/vue.png",
+        nodeUrl:"http://cotton.hzau.edu.cn/primer/public/img/icon/node.svg",
         iconWrap:{
           "font-size":"2rem",
           "margin-top":"10px",

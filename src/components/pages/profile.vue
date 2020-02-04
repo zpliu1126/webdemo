@@ -1,10 +1,9 @@
 <template>
   <div id="profilePage">
-    <el-container>
-      <el-header height="10vh">
-      </el-header>
+    <el-container direction="vertical"  v-if="isLogin">
+      <headerComponent :isLogin="isLogin"></headerComponent>
       <el-container>
-        <profileAside class="hidden-sm-and-down"></profileAside>
+        <profileAside @page-change="handlePageChange" class="hidden-sm-and-down"></profileAside>
         <el-main>
           <h1>hello, {{$route.params.name}}</h1>
           <el-row class="my-profile-wrapper">
@@ -35,12 +34,15 @@
               </el-button>
             </el-col>
           </el-row>
-          <acknowledge></acknowledge>
+          <acknowledge v-show="pageShow.user"></acknowledge>
+          <profilePrimerData v-show="pageShow.primer" :input="{'keyword':$route.params.name, rule:'true'}"></profilePrimerData>
         </el-main>
       </el-container>
+      <footerComponent height="20%"></footerComponent>
     </el-container>
-    <el-footer height="10vh">
-    </el-footer>
+    <el-container v-if="!isLogin">
+      抱歉！没有权限访问该页面，请登录后重试！
+    </el-container>
   </div>
 </template>
 <script>
@@ -48,6 +50,9 @@
   var httpUrl = confVar.httpUrl
   import profileAside from './../profile-aside.vue'
   import acknowledge from './../acknowledge.vue'
+  import footerComponent from './../footer.vue'
+  import headerComponent from './../header.vue'
+  import profilePrimerData from './../profile-primerdata.vue'
   export default {
     data() {
       return {
@@ -55,40 +60,65 @@
           width:"90%",
           "aligin-item":"center"
         },
+        elDropdown:{
+          "font-size":"25px",
+        },
+        isLogin:false,
+        pageShow:{
+          user:true,
+          primer:false,
+        },
       }
     },
     components: {
       profileAside,
       acknowledge,
-    }
-    // beforeMount() {
-    //   this.$http.get(httpUrl+"profile").then(
-    //         (reponse)=>{
-    //           if(reponse.body.errCode){ //后端数据库连接失败
-    //               this.$router.push({name:"errorPage",params:{errorMessage:reponse.body}})
-    //               return
-    //             }
-    //             if(reponse.body.authenticateThrought=="no"){
-    //               alert("没有权限访问，请登录后再试!")
-    //               this.$router.push({name:"loginPage"})
-    //               return
-    //             }
-    //             if(reponse.body.authenticateThrought==="yes"){
-    //               //认证成功，进入个人主页
-    //               alert("允许进入")
-    //             }
-    //         },
-    //         (errReponse)=>{
-    //           alert("网络似乎有点延迟，稍后再试")
-    //             return
-    //         }
-    //       )
-    // },
+      footerComponent,
+      headerComponent,
+      profilePrimerData,
+    },
+    methods: {
+      handlePageChange(changeIndex){
+        for(let key in this.pageShow){
+          this.pageShow[key]=false
+        }
+        this.pageShow[changeIndex]=true;
+      }
+    },
+    beforeMount() {
+      this.$http.get(httpUrl+"profile").then(
+            (reponse)=>{
+              if(reponse.body.errCode){ //后端数据库连接失败
+                  this.$router.push({name:"errorPage",params:{errorMessage:reponse.body}})
+                  return
+                }
+                if(reponse.body.authenticateThrought=="no"){
+                  setTimeout(()=>(this.$router.push({name:"loginPage"})),2000)
+                  return
+                }
+                if(reponse.body.authenticateThrought==="yes"){
+                  this.isLogin=true;
+                }
+            },
+            (errReponse)=>{
+              alert("网络似乎有点延迟，稍后再试")
+                return
+            }
+          )
+    },
   } 
 </script>
 <style scoped>
-  .el-header,.el-footer {
-    background-color: red;
+  .el-header, .el-footer{
+    background-color: #2f3640;
+  }
+  .el-header .el-row{
+    color: aliceblue;
+  }
+  .el-header .el-row .el-col{
+    display: inherit;
+    justify-content: center;
+    align-items: center;
   }
 
 </style>

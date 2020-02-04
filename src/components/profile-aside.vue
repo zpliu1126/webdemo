@@ -3,7 +3,7 @@
     <el-row>
       <el-col :span="24">
         <el-menu default-active="1">
-          <el-menu-item index="1">
+          <el-menu-item index="1" @click="$emit('page-change','user')">
             <i class="el-icon-user-solid"></i>
             <span>用户中心</span>
           </el-menu-item>
@@ -13,7 +13,7 @@
               <span>primer</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="2-1">我的订单</el-menu-item>
+              <el-menu-item index="2-1" @click="$emit('page-change','primer')">我的订单</el-menu-item>
               <el-menu-item index="2-2" disabled>some操作</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
@@ -30,7 +30,11 @@
 
 <script>
   export default{
+    methods: {
+      emitPage(){
 
+      }
+    },
   }
 </script>
 

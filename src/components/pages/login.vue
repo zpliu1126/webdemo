@@ -95,7 +95,7 @@ import confVar from './../configure.js'
     },
     computed: {
       bgStyle(){
-        if(window.innerWidth>=800){
+        if(window.innerWidth>=420){
           return {
           "background-color": "rgb(41, 45, 62)",
           "background-image": "url(http://cotton.hzau.edu.cn/primer/public/img/20190921231830.svg)"
