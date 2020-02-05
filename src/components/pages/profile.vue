@@ -35,7 +35,7 @@
             </el-col>
           </el-row>
           <acknowledge v-show="pageShow.user"></acknowledge>
-          <profilePrimerData v-show="pageShow.primer" :input="{'keyword':$route.params.name, rule:'true'}"></profilePrimerData>
+          <profilePrimerData v-show="pageShow.primer" :input="{'keyword':'', rule:'true'}"></profilePrimerData>
         </el-main>
       </el-container>
       <footerComponent height="20%"></footerComponent>
@@ -63,7 +63,7 @@
         elDropdown:{
           "font-size":"25px",
         },
-        isLogin:false,
+        isLogin:true,
         pageShow:{
           user:true,
           primer:false,
@@ -85,27 +85,27 @@
         this.pageShow[changeIndex]=true;
       }
     },
-    beforeMount() {
-      this.$http.get(httpUrl+"profile").then(
-            (reponse)=>{
-              if(reponse.body.errCode){ //后端数据库连接失败
-                  this.$router.push({name:"errorPage",params:{errorMessage:reponse.body}})
-                  return
-                }
-                if(reponse.body.authenticateThrought=="no"){
-                  setTimeout(()=>(this.$router.push({name:"loginPage"})),2000)
-                  return
-                }
-                if(reponse.body.authenticateThrought==="yes"){
-                  this.isLogin=true;
-                }
-            },
-            (errReponse)=>{
-              alert("网络似乎有点延迟，稍后再试")
-                return
-            }
-          )
-    },
+    // beforeMount() {
+    //   this.$http.get(httpUrl+"profile").then(
+    //         (reponse)=>{
+    //           if(reponse.body.errCode){ //后端数据库连接失败
+    //               this.$router.push({name:"errorPage",params:{errorMessage:reponse.body}})
+    //               return
+    //             }
+    //             if(reponse.body.authenticateThrought=="no"){
+    //               setTimeout(()=>(this.$router.push({name:"loginPage"})),2000)
+    //               return
+    //             }
+    //             if(reponse.body.authenticateThrought==="yes"){
+    //               this.isLogin=true;
+    //             }
+    //         },
+    //         (errReponse)=>{
+    //           alert("网络似乎有点延迟，稍后再试")
+    //             return
+    //         }
+    //       )
+    // },
   } 
 </script>
 <style scoped>

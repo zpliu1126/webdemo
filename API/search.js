@@ -50,24 +50,26 @@ router.post("/insert",function(req,rep,next){
 router.post("/update",function(req,rep,next){
   authenticateMethods.isLogin(req,function(err,result){
     if(err){
-      next(err)
+      rep.json(err)
       return
     }
     if(result==0){ //cookie修改之后resule为空也需要重新登录
-      rep.redirect("/login")
+      rep.json({
+        "authenticateThrought":"no"
+      })
       return
     }
     if(primerDataMethods.checkInsertData(req.body)){
       primerDataMethods.updateByOne(primerDataMethods.checkInsertData(req.body),function(err,data){
           if(err){
-            rep.send(err)
+            rep.json(err)
             return
           }else{
-            rep.send("更新成功")
+            rep.json({"update":1});
           } 
         })
     }else{
-      next(errorCategory.requireFields)
+      rep.json(errorCategory.requireFields)
       return
     }
   })
@@ -93,5 +95,28 @@ router.get("/delete",function(req,rep,next){
     })
   })
 })
+/* 根据post请求得到的订单号，删除数据 */
+router.post("/delete",function(req,rep,next){
+  authenticateMethods.isLogin(req,function(err,result){
+    if(err){
+      rep.json(err)
+      return
+    }
+    if(result==0){ //cookie修改之后resule为空也需要重新登录
+      rep.json({
+        "authenticateThrought":"no"
+      })
+      return
+    }
+    primerDataMethods.deleteByArray(req.body.deleteArry,function(err){
+      if(err){
+        rep.json(err)
+        return
+      }
+      rep.json({"delete":1});
+    })
+    
 
+  })
+})
 module.exports=router

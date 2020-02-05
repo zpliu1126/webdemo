@@ -14,7 +14,7 @@
             </template>
             <el-menu-item-group>
               <el-menu-item index="2-1" @click="$emit('page-change','primer')">我的订单</el-menu-item>
-              <el-menu-item index="2-2" disabled>some操作</el-menu-item>
+              <el-menu-item index="2-2" disabled>上传</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-menu-item index="3" disabled>

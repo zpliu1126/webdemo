@@ -62,6 +62,25 @@ function deleteByOne(keyword,callback){
   })
 }
 
+
+/*delete Array */
+function deleteByArray(deleteArray,callback){
+  poolConnection.getConnection(function(err,connection){
+    if(err){
+      callback(err)
+      return
+    }
+    sql=`DELETE FROM \`primer\` WHERE \`order_number\`=?`;
+    connection.query(sql,deleteArray,function(err,data){
+      if(err){
+        callback(err)
+        return
+      }
+      connection.release()
+      callback(null) //成功删除后，result结果是空的
+    })
+  })
+}
 /*更新单个数据项 */
 function updateByOne(post,callback){
   poolConnection.getConnection(function(err,connection){
@@ -150,4 +169,5 @@ module.exports={
   updateByOne,
   insertItem,
   searchByKeyword,
+  deleteByArray,
 }
