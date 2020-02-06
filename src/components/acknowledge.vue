@@ -63,10 +63,10 @@
   export default{
     data() {
       return {
-        ElementUIUrl:"http://cotton.hzau.edu.cn/primer/public/img/icon/element.svg",
-        mysqlUrl:"http://cotton.hzau.edu.cn/primer/public/img/icon/mysql.jpg",
-        vueUrl:"http://cotton.hzau.edu.cn/primer/public/img/icon/vue.png",
-        nodeUrl:"http://cotton.hzau.edu.cn/primer/public/img/icon/node.svg",
+        ElementUIUrl:"http://127.0.0.1/public/img/icon/element.svg",
+        mysqlUrl:"http://127.0.0.1/public/img/icon/mysql.jpg",
+        vueUrl:"http://127.0.0.1/public/img/icon/vue.png",
+        nodeUrl:"http://127.0.0.1/public/img/icon/node.svg",
         iconWrap:{
           "font-size":"2rem",
           "margin-top":"10px",

@@ -70,8 +70,9 @@ function deleteByArray(deleteArray,callback){
       callback(err)
       return
     }
-    sql=`DELETE FROM \`primer\` WHERE \`order_number\`=?`;
-    connection.query(sql,deleteArray,function(err,data){
+    let deletStr="('"+deleteArray.join("\',\'")+"')"
+    sql=`DELETE FROM \`primer\` WHERE \`order_number\` IN ${deletStr}`;
+    connection.query(sql,function(err,data){
       if(err){
         callback(err)
         return

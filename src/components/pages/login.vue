@@ -68,7 +68,7 @@ import confVar from './../configure.js'
         this.$refs[ruleform].validate((valid) => {
           if (valid) {
            //success validate
-           this.$http.post(httpUrl+"login",this.input,{emulateJSON: true}).then(
+           this.$http.post(httpUrl+"/login",this.input,{emulateJSON: true}).then(
         //success reponse
         (reponse)=>{
           if(reponse.body.errCode){ //后端数据库连接失败

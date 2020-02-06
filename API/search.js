@@ -11,6 +11,7 @@ router.post("/",function(req,rep,next){
   keyword=req.body.keyword.trim(); //需要去除空格
   primerDataMethods.searchByKeyword(keyword,function(err,result){
     if(err){
+      console.log(err)
       next(err)
       return
     }

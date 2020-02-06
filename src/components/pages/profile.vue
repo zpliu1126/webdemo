@@ -1,11 +1,11 @@
 <template>
   <div id="profilePage">
     <el-container direction="vertical"  v-if="isLogin">
-      <headerComponent :isLogin="isLogin"></headerComponent>
+      <headerComponent :isLogin="isLogin"  @page-change="handlePageChange"></headerComponent>
       <el-container>
         <profileAside @page-change="handlePageChange" class="hidden-sm-and-down"></profileAside>
         <el-main>
-          <h1>hello, {{$route.params.name}}</h1>
+          <h1>hello, {{$route.params.name}} <i class="el-icon-medal-1"></i></h1>
           <el-row class="my-profile-wrapper">
             <el-col :lg="6" :md="12" class="my-profile-item">
               <el-button :style="myProfileItem" size="medium" type="info" plain>
@@ -36,12 +36,10 @@
           </el-row>
           <acknowledge v-show="pageShow.user"></acknowledge>
           <profilePrimerData v-show="pageShow.primer" :input="{'keyword':'', rule:'true'}"></profilePrimerData>
+
         </el-main>
       </el-container>
       <footerComponent height="20%"></footerComponent>
-    </el-container>
-    <el-container v-if="!isLogin">
-      抱歉！没有权限访问该页面，请登录后重试！
     </el-container>
   </div>
 </template>
@@ -63,10 +61,12 @@
         elDropdown:{
           "font-size":"25px",
         },
-        isLogin:true,
+        isLogin:false,
         pageShow:{
           user:true,
           primer:false,
+          uploadOne:false,
+          uploadFile:true,
         },
       }
     },
@@ -85,27 +85,32 @@
         this.pageShow[changeIndex]=true;
       }
     },
-    // beforeMount() {
-    //   this.$http.get(httpUrl+"profile").then(
-    //         (reponse)=>{
-    //           if(reponse.body.errCode){ //后端数据库连接失败
-    //               this.$router.push({name:"errorPage",params:{errorMessage:reponse.body}})
-    //               return
-    //             }
-    //             if(reponse.body.authenticateThrought=="no"){
-    //               setTimeout(()=>(this.$router.push({name:"loginPage"})),2000)
-    //               return
-    //             }
-    //             if(reponse.body.authenticateThrought==="yes"){
-    //               this.isLogin=true;
-    //             }
-    //         },
-    //         (errReponse)=>{
-    //           alert("网络似乎有点延迟，稍后再试")
-    //             return
-    //         }
-    //       )
-    // },
+    beforeMount() {
+      this.$http.get(httpUrl+"/profile").then(
+            (reponse)=>{
+              if(reponse.body.errCode){ //后端数据库连接失败
+                  this.$router.push({name:"errorPage",params:{errorMessage:reponse.body}})
+                  return
+                }
+                if(reponse.body.authenticateThrought=="no"){
+                  this.$message({
+                    showClose: true,
+                    message: '没有权限访问，请登录后重试!',
+                    type: 'error',
+                  });
+                  setTimeout(()=>(this.$router.push({name:"loginPage"})),2000)
+                  return
+                }
+                if(reponse.body.authenticateThrought==="yes"){
+                  this.isLogin=true;
+                }
+            },
+            (errReponse)=>{
+              alert("网络似乎有点延迟，稍后再试")
+                return
+            }
+          )
+    },
   } 
 </script>
 <style scoped>

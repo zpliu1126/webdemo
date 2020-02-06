@@ -1,7 +1,12 @@
 <template>
 <el-header  :height="height">
   <el-row  type="flex" >
-  <el-col  :md="9"  :xs="24" :sm="24" :offset="3">
+  <el-col  :md="9"  :xs="4" :sm="4" class="hidden-md-and-up">
+    <i style="color: aliceblue;font-size: 25px;" class="el-icon-s-operation"
+    @click="drawer=true"
+    ></i>
+  </el-col>
+  <el-col  :md="9"  :xs="20" :sm="20" >
     <div id="logo"><span>Bioinformatic of Cotton</span></div>
   </el-col>
   <el-col class="hidden-sm-and-down" :span="8" :offset="4" >
@@ -24,6 +29,30 @@
  </el-menu>
 </el-col>
   </el-row>
+
+ <el-drawer
+  title="目录"
+  :visible.sync="drawer"
+  :direction="direction"
+  :withHeader="false"
+  size="60%"
+  :modal="modal">
+  <el-collapse v-model="activeNames" accordion >
+    <el-collapse-item  name="1">
+     <template slot="title">
+     <span :style="menueCss"><i class="el-icon-s-home"></i>主页</span>
+     </template>
+     <el-tag type="info" style="width:100%"><router-link :style="menueCss" to="/">主页</router-link></el-tag>
+     <el-tag type="info" style="width:100%"><router-link :style="menueCss" to="/login">登录</router-link></el-tag>
+    </el-collapse-item>
+    <el-collapse-item name="2"  >
+     <template slot="title">
+      <span :style="menueCss"><i class="el-icon-s-custom"></i>用户中心</span>
+     </template>
+     <el-tag type="info" style="width:100%;font-size: 22px;" @click="$emit('page-change','primer')">primer</el-tag>
+    </el-collapse-item>
+  </el-collapse>
+</el-drawer>
 </el-header>
 </template>
 <script>
@@ -36,6 +65,26 @@ export default {
     isLogin:{
       default:false,
     },
+  },
+  data() {
+      return {
+        drawer: false,
+        direction: 'ltr',
+        modal:true,
+        activeNames:'',
+        menueCss:{
+          "font-size":"22px",
+          "text-decoration": "none",    
+        }
+    }
+  },
+  computed: {
+
+  },
+  methods: {
+    // hh(){
+    //   console.log(this.$route)
+    // }
   },
 }
 </script>
@@ -51,6 +100,7 @@ export default {
   height:100%;
   align-items: center;
   justify-content:center;
+
 
 }
 #logo span{
