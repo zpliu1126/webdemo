@@ -47,7 +47,7 @@
         layout="prev, pager, next" background :total="reponseDataCount">
       </el-pagination>
     </el-row>
-    <el-dialog title="PrimerData" :visible.sync="dialogFormVisible">
+    <el-dialog title="PrimerData" :visible.sync="dialogFormVisible" :width="dialogWidth">
       <el-form :model="updateForm">
         <el-form-item label="订购人" :label-width="formLabelWidth">
           <el-input v-model="updateForm.subscriber" disabled autocomplete="off"></el-input>
@@ -98,7 +98,7 @@
         checkAll: false,
         isIndeterminate: true,
         dialogFormVisible: false,
-        formLabelWidth: "80%"
+        formLabelWidth: "100px"
       }
     },
     methods: {
@@ -106,7 +106,6 @@
         this.$http.post(httpUrl + "/update", this.updateForm, { emulateJSON: true }).then(
           //success reponse
           (reponse) => {
-            console.log(reponse)
             if (reponse.body.update == 1) {
               //更新成功，后台请求数据进行更新
               this.dialogFormVisible = false;
@@ -120,7 +119,7 @@
             }
             if (reponse.body.errCode) {
               //后台出错了
-              this.$router.push({ name: "errorPage", params: { "errorMessage": reponse } });
+              this.$router.push({ name: "errorPage", params: { "errorMessage": reponse.body } });
               return
             }
             if (reponse.body.authenticateThrought == "no") {
@@ -257,6 +256,12 @@
       this.requestByKeyword(this.input)
     },
     computed: {
+      dialogWidth(){
+        if(window.innerWidth>=600){
+          return "50%"
+        }
+        return "85%"
+      },
       tableReponsData() {
         var startIndex = (this.currentPage - 1) * this.pageSize;
         var endIndex = this.currentPage * this.pageSize;

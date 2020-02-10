@@ -11,11 +11,10 @@ router.post("/",function(req,rep,next){
   keyword=req.body.keyword.trim(); //需要去除空格
   primerDataMethods.searchByKeyword(keyword,function(err,result){
     if(err){
-      console.log(err)
-      next(err)
+      rep.json(err)
       return
     }
-    rep.status(200).send(result)
+    rep.json(result)
   })
 })
 
@@ -23,26 +22,31 @@ router.post("/",function(req,rep,next){
 router.post("/insert",function(req,rep,next){
   authenticateMethods.isLogin(req,function(err,result){
     if(err){
-      next(err)
+      rep.json(err)
       return
     }
     if(result==0){ //cookie修改之后resule为空也需要重新登录
-      rep.redirect("/login")
+      rep.json({
+        "authenticateThrought":"no"
+      })
       return
     }
+    console.log(req.body)
     if(primerDataMethods.checkInsertData(req.body)){
+      console.log(req.body)
       primerDataMethods.insertItem(primerDataMethods.checkInsertData(req.body),function(err,result){
         if(err && err.sqlState=="23000"){
-          rep.send(err.sqlMessage) //mysql自带错误,由于重复插入；不需要跳转到错误中间件
+          rep.send(errorCategory.mysql.DuplicateInsert) //mysql自带错误,由于重复插入；不需要跳转到错误中间件
           return
         }else if(err){
-          next(errorCategory.mysql.sql)
+          console.log(err)
+          rep.json(errorCategory.mysql.sql)
           return
         }
-        rep.send("插入成功")
+        rep.json({"insert":1})
       })
     }else{
-      next(errorCategory.mysql.requireFields)
+      rep.json(errorCategory.mysql.requireFields)
       return
     }
   })

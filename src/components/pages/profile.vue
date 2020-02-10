@@ -35,8 +35,8 @@
             </el-col>
           </el-row>
           <acknowledge v-show="pageShow.user"></acknowledge>
-          <profilePrimerData v-show="pageShow.primer" :input="{'keyword':'', rule:'true'}"></profilePrimerData>
-
+          <profilePrimerData   v-show="pageShow.primer" :input="{'keyword':'', rule:'true'}"></profilePrimerData>
+          <profilePrimerUpload v-show="pageShow.upload" :user="$route.params.name"></profilePrimerUpload>
         </el-main>
       </el-container>
       <footerComponent height="20%"></footerComponent>
@@ -51,7 +51,17 @@
   import footerComponent from './../footer.vue'
   import headerComponent from './../header.vue'
   import profilePrimerData from './../profile-primerdata.vue'
+  import profilePrimerUpload from "./../profile-upload.vue"
   export default {
+    props:{
+      pageShow:{
+         default:()=>({ 
+          user:true,
+          primer:false,
+          upload:false,
+        })
+      },
+    },
     data() {
       return {
         myProfileItem:{
@@ -61,13 +71,8 @@
         elDropdown:{
           "font-size":"25px",
         },
-        isLogin:false,
-        pageShow:{
-          user:true,
-          primer:false,
-          uploadOne:false,
-          uploadFile:true,
-        },
+        isLogin:true,
+
       }
     },
     components: {
@@ -76,6 +81,7 @@
       footerComponent,
       headerComponent,
       profilePrimerData,
+      profilePrimerUpload,
     },
     methods: {
       handlePageChange(changeIndex){
@@ -86,30 +92,30 @@
       }
     },
     beforeMount() {
-      this.$http.get(httpUrl+"/profile").then(
-            (reponse)=>{
-              if(reponse.body.errCode){ //后端数据库连接失败
-                  this.$router.push({name:"errorPage",params:{errorMessage:reponse.body}})
-                  return
-                }
-                if(reponse.body.authenticateThrought=="no"){
-                  this.$message({
-                    showClose: true,
-                    message: '没有权限访问，请登录后重试!',
-                    type: 'error',
-                  });
-                  setTimeout(()=>(this.$router.push({name:"loginPage"})),2000)
-                  return
-                }
-                if(reponse.body.authenticateThrought==="yes"){
-                  this.isLogin=true;
-                }
-            },
-            (errReponse)=>{
-              alert("网络似乎有点延迟，稍后再试")
-                return
-            }
-          )
+      // this.$http.get(httpUrl+"/profile").then(
+      //       (reponse)=>{
+      //         if(reponse.body.errCode){ //后端数据库连接失败
+      //             this.$router.push({name:"errorPage",params:{errorMessage:reponse.body}})
+      //             return
+      //           }
+      //           if(reponse.body.authenticateThrought=="no"){
+      //             this.$message({
+      //               showClose: true,
+      //               message: '没有权限访问，请登录后重试!',
+      //               type: 'error',
+      //             });
+      //             setTimeout(()=>(this.$router.push({name:"loginPage"})),2000)
+      //             return
+      //           }
+      //           if(reponse.body.authenticateThrought==="yes"){
+      //             this.isLogin=true;
+      //           }
+      //       },
+      //       (errReponse)=>{
+      //         alert("网络似乎有点延迟，稍后再试")
+      //           return
+      //       }
+      //     )
     },
   } 
 </script>

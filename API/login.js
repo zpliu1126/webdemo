@@ -28,12 +28,17 @@ router.post("/login",function(req,rep,next){
     }
     if(result!=false){
       //domain解决反向代理设置cookie问题
+      let chineseName=escape("刘振平")
       rep.cookie(
         "account",{name:result[0].name,password:result[0].password},
         {
           maxAge:86400000*7,
         }
       )
+      rep.cookie("chineseName",chineseName,{
+        signed:false,
+        maxAge:86400000*7,
+      })
       // rep.redirect("/primer/profile?"+result[0].name)
       rep.json({
         "authenticateThrought":"yes"

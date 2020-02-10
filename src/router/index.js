@@ -17,7 +17,9 @@ var router=new VueRouter({
     meta:{title:"error"}
   },
     {path:"/login",name:'loginPage',component:loginPage,meta:{title:"登录"}},
-    {path:"/profile/:name",name:'profilePage',component:profilePage,meta:{title:"个人主页"}},
+    {path:"/profile/:name",name:'profilePage',component:profilePage,
+    props:(route)=>({pageShow:route.params.pageShow}),
+    meta:{title:"个人主页"}},
     ]  
   
   

@@ -45,7 +45,7 @@
      <el-tag type="info" style="width:100%"><router-link :style="menueCss" to="/">主页</router-link></el-tag>
      <el-tag type="info" style="width:100%"><router-link :style="menueCss" to="/login">登录</router-link></el-tag>
     </el-collapse-item>
-    <el-collapse-item name="2"  >
+    <el-collapse-item name="2" :disabled="!isLogin" >
      <template slot="title">
       <span :style="menueCss"><i class="el-icon-s-custom"></i>用户中心</span>
      </template>

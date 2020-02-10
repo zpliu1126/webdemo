@@ -19,7 +19,7 @@ import headerComponents from "./../header.vue"
       onGetData(reponse){
         if(reponse.errCode){
           //后台出错了
-          this.$router.push({name:"errorPage",params:{"errorMessage":reponse}});
+          this.$router.push({name:"errorPage",params:{"errorMessage":reponse.body}});
         }else{
           //传递返回数据和关键字
           this.$router.push({name:"showData",params:{"reponsData":reponse.result,"searchKeyword":reponse.keyword}});

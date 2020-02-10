@@ -14,8 +14,7 @@
             </template>
             <el-menu-item-group>
               <el-menu-item index="2-1" @click="$emit('page-change','primer')"><i class="el-icon-s-order"></i><span>我的订单</span></el-menu-item>
-              <el-menu-item index="2-2" >单个上传</el-menu-item>
-              <el-menu-item index="2-3" ><i class="el-icon-folder"></i><span>批量上传</span></el-menu-item>
+              <el-menu-item index="2-2"  @click="$emit('page-change','upload')"><i class="el-icon-folder"></i><span>上传</span></el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-menu-item index="3" disabled>
