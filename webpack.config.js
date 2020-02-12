@@ -14,7 +14,7 @@ module.exports={
   },
   resolve:{
     alias:{
-        vue$:path.join(__dirname,"/node_modules/vue/dist/vue.js")
+        vue$:path.join(__dirname,"/node_modules/vue/dist/vue.min.js")
     }
   },
   module:{

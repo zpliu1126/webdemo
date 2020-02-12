@@ -13,7 +13,6 @@ function authenticateAccount(account,password,callback){
     sql='select user.* ,user.name,teacher.teacher_name from user left join teacher  on user.teacherID=teacher.id WHERE user.name=? and user.password=?'
     connection.query(sql,[account,password],function(err,result,fields){
       if(err){
-        console.log(err)
         callback(errorCategory.mysql.sql) //error category
         return ;
       }

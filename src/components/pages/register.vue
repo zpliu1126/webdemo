@@ -179,7 +179,7 @@ body > #register{
 #register{
     height: 100%;
     width: 100%;
-    background-image: url(https://imgchr.com/content/images/system/home_cover_1552414407320_3a5f92.jpg);
+    background-image: url(http://cotton.hzau.edu.cn/primer/public/img/register.jpg);
     background-repeat: repeat;
     background-size: cover;
 }
