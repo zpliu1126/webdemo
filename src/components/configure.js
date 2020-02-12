@@ -1,3 +1,3 @@
 module.exports={
-  httpUrl:"http://cotton.hzau.edu.cn"
+  httpUrl:"http://cotton.hzau.edu.cn/primer"
 }
