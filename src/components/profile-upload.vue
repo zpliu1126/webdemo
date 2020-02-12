@@ -155,7 +155,7 @@
                 type: 'success',
         });
         }
-        this.$refs.upload.clearFiles();
+        setTimeout(this.$refs.upload.clearFiles(),2000);
       },
       beforeFileUpload(file){
           const isXlsx=file.type=="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

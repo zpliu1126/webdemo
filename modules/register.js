@@ -34,7 +34,6 @@ function addAccount(body,callback){
       return ;
     }
     connection.release();
-    console.log(result)
     callback(null,result)
   })
   })
