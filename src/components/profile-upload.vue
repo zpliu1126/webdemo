@@ -1,23 +1,35 @@
 <template>
   <el-main id="uploadPrimer">
     <el-row>
-      <el-col :xs="12" :sm="6" :span="6">
+      <el-col :xs="12" :sm="6" :span="8">
         <el-button type="warning" @click="dialogFormVisible=true">单个上传</el-button>
       </el-col>
     </el-row>
     <el-row>
-      <el-upload class="upload-demo" :drag="uploadDrag" action="https://jsonplaceholder.typicode.com/posts/" multiple>
+      <span>批量上传请先下载模板文件！</span>
+      <el-link type="info" :href="templateUrl">
+        <i class="el-icon-document"></i>模板文件</el-link>
+    </el-row>
+    <el-row>
+      <el-upload 
+      ref="upload"
+      class="upload-demo" 
+      :drag="uploadDrag" :action="uploadFileUrl" multiple
+      :before-upload="beforeFileUpload"
+      :on-success="handleFileuploadSuccess"
+      >
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div slot="tip" class="el-upload__tip">只能上传xlsx文件</div>
       </el-upload>
     </el-row>
     <el-dialog title="PrimerData" :visible.sync="dialogFormVisible" :width="dialogWidth">
       <el-form :model="updateForm" ref="updateForm" status-icon :rules="rules">
-        <el-form-item label="订购人" prop="subscriber" :label-width="formLabelWidth">
-          <el-input v-model="updateForm.subscriber" disabled autocomplete="off"></el-input>
+        <el-form-item label="订购人" prop="chineseName" :label-width="formLabelWidth">
+          <el-input v-model="updateForm.chineseName" disabled autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item required label="课题组老师" prop="teacher" :label-width="formLabelWidth">
-          <el-input v-model="updateForm.teacher" autocomplete="off"></el-input>
+          <el-input v-model="updateForm.teacher" disabled autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item required label="公司" prop="company" :label-width="formLabelWidth">
           <el-input v-model="updateForm.company" autocomplete="off"></el-input>
@@ -76,14 +88,25 @@
         callback() //success validate
       }
     };
-      let subscriber =unescape(unescape(document.cookie.split("chineseName=")[1]));//获取cookie信息
+      let chineseName =document.cookie ? unescape(unescape(this.$cookies.get('chineseName'))) : '';//获取cookie信息
+      let teacher =document.cookie ? unescape(unescape(this.$cookies.get('teacherName'))) : '';//获取cookie信息
+      let subscriber=document.cookie ? this.$cookies.get('userId') :'';
+      let uploadFileUrl=httpUrl+"/uploadFile";
+      let templateUrl=httpUrl+"/public/primer/template.xlsx"
       return {
+        templateUrl,
+        uploadFileUrl,
+        dupliacteSql:false,
+        chineseName,
+        subscriber,
+        teacher,
         uploadDrag: true,
         dialogFormVisible: false,
         formLabelWidth: "100px",
         updateForm: {
+          chineseName,
           subscriber,
-          teacher: '',
+          teacher,
           secondID: '',
           thirdID: '',
           company: '',
@@ -97,7 +120,7 @@
           ThioCount: '',
         },
         rules:{
-          subscriber:[{validator:notNull,trigger:'blur'}],
+          chineseName:[{validator:notNull,trigger:'blur'}],
           teacher:[{validator:notNull,trigger:'blur'}],
           company:[{validator:notNull,trigger:'blur'}],
           synthesis_num:[{validator:notNull,trigger:'blur'}],
@@ -107,6 +130,40 @@
       }
     },
     methods: {
+      handleFileuploadSuccess(reponse,file,fileList){
+        const h = this.$createElement;
+        if(reponse.errCode){
+          this.$router.push({ name: "errorPage", params: { "errorMessage": reponse} });
+          return
+        }
+        else if(reponse.errno==1062){
+          this.$notify({
+          title: '重复插入的订单编号',
+          message: h('i', { style: 'color: #E6A23C'}, reponse.errorMessage),
+          type: 'warning',
+        });
+        }else if(reponse.upload==0){
+          this.$message({
+                showClose: true,
+                message: '文件没有内容！',
+                type: 'error',
+          });
+        }else{
+        this.$message({
+                showClose: true,
+                message: '文件上传成功，数据已经保存！',
+                type: 'success',
+        });
+        }
+        this.$refs.upload.clearFiles();
+      },
+      beforeFileUpload(file){
+          const isXlsx=file.type=="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          if(!isXlsx){
+            this.$message.error('上传文件只能是 xlsx 格式!');
+          }
+          return isXlsx;
+      },
       handlevalidateForm(ruleform){
         this.$refs[ruleform].validate((valid) => {
           if (valid) {
@@ -138,10 +195,14 @@
                 message: '插入成功！',
                 type: 'success',
               });
-              this.dialogFormVisible=false;
-              for(key in this.updateForm){
-                this.updateForm.key=''
+              
+              for(var key in this.updateForm){
+                this.updateForm[key]=''
               }
+              this.updateForm.teacher=this.teacher
+              this.updateForm.subscriber=this.subscriber
+              this.updateForm.chineseName=this.chineseName
+              this.dialogFormVisible=false;
               return
             }
           },
@@ -149,7 +210,7 @@
           (reponse) => {
             this.$message({
               showClose: true,
-              message: '未知错误发生!',
+              message: '服务器开小差啦!',
               type: 'warning',
             });
           }

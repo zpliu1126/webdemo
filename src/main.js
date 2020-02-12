@@ -6,6 +6,9 @@ import vueRouter from 'vue-router'
 import "element-ui/lib/theme-chalk/index.css"
 import 'element-ui/lib/theme-chalk/display.css';
 import router from './router/index.js'
+import VueCookies from 'vue-cookies'
+
+Vue.use(VueCookies)
 Vue.use(vueRouter)
 
 import App from "./App.vue"

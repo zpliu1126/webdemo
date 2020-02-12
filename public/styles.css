@@ -171,3 +171,32 @@ img[data-v-3b4238c6]{
   align-items: center;
 }
 
+
+body > #register[data-v-c4de10c4]{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    margin-left: 0px;
+}
+#register[data-v-c4de10c4]{
+    height: 100%;
+    width: 100%;
+    background-image: url(https://imgchr.com/content/images/system/home_cover_1552414407320_3a5f92.jpg);
+    background-repeat: repeat;
+    background-size: cover;
+}
+.register-form[data-v-c4de10c4]{
+    height: 60%;
+    width: 100%;
+    justify-content: center;
+}
+.register-form .el-row[data-v-c4de10c4]{
+  align-items: center;
+}
+.register-form .el-row .el-col[data-v-c4de10c4]{
+  display: inherit;
+  justify-content: center;
+}
+

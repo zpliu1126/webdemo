@@ -8,9 +8,9 @@
       </el-row>
       <el-row class="result" :span="24">
         <el-table :data="tableReponsData" border style="width: 100%">
-          <el-table-column fixed prop="subscriber" label="订购人" width="100">
+          <el-table-column fixed prop="chineseName" label="订购人" width="100">
           </el-table-column>
-          <el-table-column fixed prop="teacher" label="课题组老师" width="100">
+          <el-table-column fixed prop="teacher_name" label="课题组老师" width="100">
           </el-table-column>
           <el-table-column  prop="order_number" label="订单号" width="150">
           </el-table-column>

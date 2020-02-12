@@ -17,6 +17,9 @@
           <el-form-item>
             <el-button :style="loginButton" type="success" @click="handleLogin('loginInput')">login</el-button>
           </el-form-item>
+          <el-form-item>
+           <span :style="loginButton">New to GCGI? <router-link :to="{name:'registerPage'}" :style="loginButton">Create a account</router-link></span>
+          </el-form-item>
         </el-form>
       </el-col>
     </el-row>
@@ -52,6 +55,9 @@ import confVar from './../configure.js'
         loginButton:{
           "width":"98%",
           "margin-left": "1%",
+          "font-size":"16px",
+          "color":"#FFF",
+          "text-align":"center",
         },
         loginFormRules:{
           name:[{validator:checkInputAccount,trigger:'blur'}],

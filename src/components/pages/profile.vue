@@ -1,11 +1,11 @@
 <template>
   <div id="profilePage">
     <el-container direction="vertical"  v-if="isLogin">
-      <headerComponent :isLogin="isLogin"  @page-change="handlePageChange"></headerComponent>
+      <headerComponent   @page-change="handlePageChange"></headerComponent>
       <el-container>
         <profileAside @page-change="handlePageChange" class="hidden-sm-and-down"></profileAside>
         <el-main>
-          <h1>hello, {{$route.params.name}} <i class="el-icon-medal-1"></i></h1>
+          <h1>hello, {{userName}} <i class="el-icon-medal-1"></i></h1>
           <el-row class="my-profile-wrapper">
             <el-col :lg="6" :md="12" class="my-profile-item">
               <el-button :style="myProfileItem" size="medium" type="info" plain>
@@ -35,7 +35,7 @@
             </el-col>
           </el-row>
           <acknowledge v-show="pageShow.user"></acknowledge>
-          <profilePrimerData   v-show="pageShow.primer" :input="{'keyword':'', rule:'true'}"></profilePrimerData>
+          <profilePrimerData   v-show="pageShow.primer" :ifAjax="pageShow.primer":input="{'keyword':userId, rule:'true'}"></profilePrimerData>
           <profilePrimerUpload v-show="pageShow.upload" :user="$route.params.name"></profilePrimerUpload>
         </el-main>
       </el-container>
@@ -63,6 +63,8 @@
       },
     },
     data() {
+      let userName =document.cookie ? unescape(unescape(this.$cookies.get('chineseName'))) : '';
+      let userId =document.cookie ?this.$cookies.get('userId'):'';
       return {
         myProfileItem:{
           width:"90%",
@@ -72,6 +74,8 @@
           "font-size":"25px",
         },
         isLogin:true,
+        userName,
+        userId,
 
       }
     },

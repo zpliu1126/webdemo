@@ -6,11 +6,10 @@ var authenticateMethods=require(path.resolve(__dirname+"/../modules/authenticate
 /* check psot data from client*/
 
 function checkInsertData(post){
-  let stringFields=["sequence","subscriber","order_number",
-  "teacher","synthesis_num","company","list_number",
+  let stringFields=["sequence","order_number","synthesis_num","company","list_number",
   "secondID","thirdID","primerName",
    "decoratePattern","purificationPattern",];
-  if(post["sequence"] && post["subscriber"] && post["teacher"] && post["company"] && post["synthesis_num"] && post["order_number"]){
+  if(post["sequence"] && post["subscriber"]  && post["company"] && post["synthesis_num"] && post["order_number"]){
   //保证必填项
   for(let index in stringFields){
     if(typeof post[stringFields[index]]=="undefined"){
@@ -22,7 +21,7 @@ function checkInsertData(post){
   let intFields=["baseCount","tubeCount","contentCount","ThioCount"]
   let floatFields=["TMValue","MolecularWeight","GCContent"]
   for(let index in intFields){
-    if(typeof post[intFields[index]]=="undefined"){
+    if(typeof post[intFields[index]]=="undefined" ||post[intFields[index]]==''){
       post[intFields[index]]=0
     }
     else{
@@ -30,7 +29,7 @@ function checkInsertData(post){
     }
   }
   for(let index in floatFields){
-    if(typeof post[floatFields[index]]=="undefined"){
+    if(typeof post[floatFields[index]]=="undefined"|| post[floatFields[index]]==''){
       post[floatFields[index]]=0.0
     }
     else{
@@ -89,7 +88,7 @@ function updateByOne(post,callback){
       callback(errorCategory.mysql.connection)
       return
     }
-    sql=`UPDATE \`primer\` SET \`subscriber\`="${post.subscriber}",\`teacher\`="${post.teacher}",
+    sql=`UPDATE \`primer\` SET \`subscriber\`="${post.subscriber}",
     \`list_number\`="${post.list_number}",\`synthesis_num\`="${post.synthesis_num}",\`secondID\`="${post.secondID}",
     \`thirdID\`="${post.thirdID}",\`primerName\`="${post.primerName}",\`baseCount\`="${post.baseCount}"
     ,\`tubeCount\`="${post.tubeCount}",
@@ -121,11 +120,11 @@ function insertItem(post,callback){
       callback(errorCategory.mysql.connection)
       return
     }
-    sql=`INSERT into primer (\`sequence\`,\`subscriber\`,\`teacher\`,\`order_number\`,
+    sql=`INSERT into primer (\`sequence\`,\`subscriber\`,\`order_number\`,
     \`list_number\`,\`synthesis_num\`,\`secondID\`,\`thirdID\`,
     \`primerName\`,\`baseCount\`,\`tubeCount\`,\`contentCount\`,\`decoratePattern\`,
     \`purificationPattern\`,\`ThioCount\`,\`TMValue\`,\`MolecularWeight\`,\`GCContent\`,\`company\`)
-    VALUES ("${post.sequence}","${post.subscriber}","${post.teacher}",
+    VALUES ("${post.sequence}","${post.subscriber}",
       "${post.order_number}","${post.list_number}","${post.synthesis_num}",
       "${post.secondID}","${post.thirdID}","${post.primerName}",
       "${post.baseCount}","${post.tubeCount}","${post.contentCount}",
@@ -147,12 +146,11 @@ function insertItem(post,callback){
 function searchByKeyword(keyword ,callback){
   poolConnection.getConnection(function(err,connection){
     if(err){
-      console.log(err)
       callback(errorCategory.mysql.connection)
       return
     }
-    sql=`select * FROM \`primer\` 
-    WHERE CONCAT( \`subscriber\`,\`teacher\`,\`company\`,\`secondID\`,\`thirdID\`,\`order_number\`) 
+    sql=`select  primer.*,user.chineseName,teacher.teacher_name FROM teacher,primer left join user on primer.subscriber=user.id 
+    WHERE  user.teacherId=teacher.id AND CONCAT( user.chineseName,teacher.teacher_name,\`company\`,\`secondID\`,\`thirdID\`,\`order_number\`) 
     like "%${keyword}%" `
     connection.query(sql,function(err,result){
       if(err){
@@ -164,11 +162,84 @@ function searchByKeyword(keyword ,callback){
     })
   })
 }
+
+function searchByUser(keyword,callback){
+  poolConnection.getConnection(function(err,connection){
+    if(err){
+      callback(errorCategory.mysql.connection)
+      return
+    }
+    sql= `select primer.*,user.chineseName,teacher.teacher_name 
+    from teacher,primer left join user on primer.subscriber=user.id
+     where user.teacherId=teacher.id AND user.id=${keyword};`
+    connection.query(sql,function(err,result){
+      if(err){
+        callback(errorCategory.mysql.sql)
+        return
+      }
+      connection.release()
+      callback(null,result)
+    })
+  })
+}
+
+function insertByArray(userId,insertArray,callback){
+  poolConnection.getConnection(function(err,connection){
+    if(err){
+      callback(errorCategory.mysql.connection)
+      return
+    }
+    let sql=`INSERT into primer (\`subscriber\`,\`order_number\`,
+    \`synthesis_num\`,\`list_number\`,\`secondID\`,\`thirdID\`,
+    \`primerName\`,\`sequence\`,\`baseCount\`,\`tubeCount\`,\`contentCount\`,\`decoratePattern\`,\`remark\`,
+    \`purificationPattern\`,\`ThioCount\`,\`TMValue\`,\`MolecularWeight\`,\`GCContent\`,\`company\`)
+    VALUES ?`;
+    // let tmpcallback=function(err,data){
+
+    // }
+    // for(let i=0;i<insertArray.length;i++){
+    //   connection.query(sql,insertArray[i],function(err,result){
+    //     if(err){
+    //       console.log(err)
+    //       tmpcallback(errorCategory.mysql.sql)
+    //       return
+    //    }
+    //    tmpcallback(null,result)
+    //   })
+    // }
+    // connection.release()
+    insertArray.map((item)=>{
+      item.unshift(userId)
+    })
+    let duplicateEntry=[]
+    connection.query(sql,[insertArray],function(err,result)
+    {  
+     if(err && err.errno!=1062){
+      callback(errorCategory.mysql.sql)
+      return
+    }else if(err && err.errno==1062){
+      errorMessage=err.sqlMessage.split("for")[0]
+      result={
+        "errno":1062,
+        errorMessage,
+      }
+      callback(null,result)
+      return
+    }else{
+      connection.release()
+      callback(null,result)
+    } 
+  })
+    
+  })
+}
 module.exports={
   checkInsertData,
   deleteByOne,
   updateByOne,
   insertItem,
+  insertByArray,
   searchByKeyword,
+  searchByUser,
   deleteByArray,
 }

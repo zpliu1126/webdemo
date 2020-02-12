@@ -28,15 +28,24 @@ router.post("/login",function(req,rep,next){
     }
     if(result!=false){
       //domain解决反向代理设置cookie问题
-      let chineseName=escape("刘振平")
+      let chineseName=escape(result[0].chineseName)
+      let teacherName=escape(result[0].teacher_name)
       rep.cookie(
-        "account",{name:result[0].name,password:result[0].password},
+        "account",'{\"name\":'+'\"'+result[0].name+'\"'+',\"password\":'+'\"'+result[0].password+'\"'+'}',
         {
           maxAge:86400000*7,
         }
       )
+      rep.cookie("userId",result[0].id,{
+        maxAge:86400000*7,
+      })
       rep.cookie("chineseName",chineseName,{
-        signed:false,
+        maxAge:86400000*7,
+      })
+      rep.cookie("teacherName",teacherName,{
+        maxAge:86400000*7,
+      })
+      rep.cookie("islogin",1,{
         maxAge:86400000*7,
       })
       // rep.redirect("/primer/profile?"+result[0].name)

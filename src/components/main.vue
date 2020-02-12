@@ -52,10 +52,21 @@ export default {
       this.$http.post(httpUrl+"/",formData,{emulateJSON: true}).then(
         //success reponse
         (reponse)=>{
+          if (reponse.body.errCode) {
+              //后台出错了
+              this.$router.push({ name: "errorPage", params: { "errorMessage": reponse.body } });
+              return
+        }
           this.$emit('seach-bykeword',{"result":reponse.body,"keyword":this.input.keyword})    
       },
       //failed reponse
-      (reponse)=>{alert("somethings error!")})
+      (reponse)=>{
+        this.$message({
+                showClose: true,
+                message: '服务器开小差啦！稍后再试',
+                type: 'error',
+        });
+      })
     } 
   },
 }

@@ -5,6 +5,7 @@ var bodyParser=require("body-parser")
 
 var searchRouter=require(path.join(__dirname,"API/search.js"))
 var loginRouter=require(path.join(__dirname,"API/login.js"))
+var registerRouter=require(path.join(__dirname,"API/register.js"))
 
 var cookieParser=require("cookie-parser")
 app.use(bodyParser.json())
@@ -32,6 +33,7 @@ app.all("*",function(req,rep,next){
 /*mount router */
 app.use(searchRouter)
 app.use(loginRouter)
+app.use(registerRouter)
 
 /*########################*/
 //err page

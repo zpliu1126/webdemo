@@ -10,9 +10,10 @@ function authenticateAccount(account,password,callback){
       return ;
     }
     //verification
-    sql='SELECT * FROM `user` WHERE `name`=? and `password`=?'
+    sql='select user.* ,user.name,teacher.teacher_name from user left join teacher  on user.teacherID=teacher.id WHERE user.name=? and user.password=?'
     connection.query(sql,[account,password],function(err,result,fields){
       if(err){
+        console.log(err)
         callback(errorCategory.mysql.sql) //error category
         return ;
       }
@@ -27,8 +28,8 @@ function isLogin(req,callback){
     callback(null,0);
     return
   }
-  account=req.cookies.account.name.trim()
-  password=req.cookies.account.password.trim()
+  account=JSON.parse(req.cookies.account).name.trim()
+  password=JSON.parse(req.cookies.account).password.trim()
   authenticateAccount(account,password,callback)
 }
 module.exports={

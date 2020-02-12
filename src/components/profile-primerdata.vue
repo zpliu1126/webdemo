@@ -17,12 +17,12 @@
           </template>
           <template slot-scope="scope">
             <el-checkbox-group v-model="checkList" @change="handleCheckeditemChange">
-              <el-checkbox :label="scope.row.order_number" :key="scope.row.order_number">{{scope.row.subscriber}}
+              <el-checkbox :label="scope.row.order_number" :key="scope.row.order_number">{{scope.row.chineseName}}
               </el-checkbox>
             </el-checkbox-group>
           </template>
         </el-table-column>
-        <el-table-column fixed prop="teacher" label="课题组老师" width="100">
+        <el-table-column fixed prop="teacher_name" label="课题组老师" width="100">
         </el-table-column>
         <el-table-column prop="order_number" label="订单号" width="150">
         </el-table-column>
@@ -50,10 +50,10 @@
     <el-dialog title="PrimerData" :visible.sync="dialogFormVisible" :width="dialogWidth">
       <el-form :model="updateForm">
         <el-form-item label="订购人" :label-width="formLabelWidth">
-          <el-input v-model="updateForm.subscriber" disabled autocomplete="off"></el-input>
+          <el-input v-model="updateForm.chineseName" disabled autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="课题组老师" :label-width="formLabelWidth">
-          <el-input v-model="updateForm.teacher" disabled autocomplete="off"></el-input>
+          <el-input v-model="updateForm.teacher_name" disabled autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="二代基因编号" :label-width="formLabelWidth">
           <el-input v-model="updateForm.secondID" autocomplete="off"></el-input>
@@ -72,7 +72,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">Cancle</el-button>
+        <el-button @click="handleUpdateCancle">Cancle</el-button>
         <el-button type="success" @click="handleUpdataBody">Update</el-button>
       </div>
     </el-dialog>
@@ -89,6 +89,9 @@
           rule: 'false'
         }),
       },
+      ifAjax:{
+        default:true,
+      },
     },
     data() {
       return {
@@ -102,6 +105,10 @@
       }
     },
     methods: {
+      handleUpdateCancle(){
+        this.requestByKeyword(this.input)
+        this.dialogFormVisible = false
+      },
       handleUpdataBody() {
         this.$http.post(httpUrl + "/update", this.updateForm, { emulateJSON: true }).then(
           //success reponse
@@ -153,7 +160,7 @@
         this.isIndeterminate = checkCount > 0 && checkCount < this.reponsData.length
       },
       requestByKeyword(formData) {
-        this.$http.post(httpUrl + "/", formData, { emulateJSON: true }).then(
+        this.$http.post(httpUrl + "/userData", formData, { emulateJSON: true }).then(
           //success reponse
           (reponse) => {
             if (reponse.errCode) {
@@ -163,13 +170,12 @@
             }
 
             this.reponsData=reponse.body
-            
           },
           //failed reponse
           (reponse) => {
             this.$message({
               showClose: true,
-              message: '未知错误发生!',
+              message: '服务器开小差啦!',
               type: 'warning',
             });
           })
@@ -252,9 +258,6 @@
         });
       }
     },
-    created() {
-      this.requestByKeyword(this.input)
-    },
     computed: {
       dialogWidth(){
         if(window.innerWidth>=600){
@@ -295,6 +298,16 @@
           return this.reponsData.filter((item) => (item.order_number == this.checkList[0]))[0]
         }
         return {} //防止出现undefined
+      }
+    },
+    created() {
+      this.requestByKeyword(this.input)
+    },
+    watch: {
+      'ifAjax':function(){
+        if(this.ifAjax){
+          this.requestByKeyword(this.input)
+        }
       }
     },
   }
