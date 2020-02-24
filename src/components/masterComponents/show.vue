@@ -32,8 +32,13 @@
                   <el-button slot="prepend">姓名</el-button>
                 </el-input>
               </el-form-item>
+              <el-form-item prop="home">
+                <el-input type="text" v-model.trim="onePerson.home" disabled size="large" class="el-input-prefix">
+                  <el-button slot="prepend">籍贯</el-button>
+                </el-input>
+              </el-form-item>
               <el-form-item prop="sex">
-                <el-input type="text" :value="onePerson.sex ? '女':'男' " disabled size="large" class="el-input-prefix">
+                <el-input type="text" :value="onePerson.sex == 0 ? '男':'女' " disabled size="large" class="el-input-prefix">
                   <el-button slot="prepend">性别</el-button>
                 </el-input>
               </el-form-item>
@@ -45,6 +50,16 @@
               <el-form-item prop="school">
                 <el-input type="text" v-model.trim="onePerson.school" disabled  size="large" class="el-input-prefix">
                   <el-button slot="prepend">本科毕业院校</el-button>
+                </el-input>
+              </el-form-item>
+              <el-form-item prop="english">
+                <el-input type="text" v-model.trim="onePerson.english" disabled  size="large" class="el-input-prefix">
+                  <el-button slot="prepend">英语水平</el-button>
+                </el-input>
+              </el-form-item>
+              <el-form-item prop="computer">
+                <el-input type="text" v-model.trim="onePerson.computer" disabled  size="large" class="el-input-prefix">
+                  <el-button slot="prepend">计算机水平</el-button>
                 </el-input>
               </el-form-item>
             <el-form-item>
@@ -98,10 +113,32 @@
               v-model="onePerson.interest">
             </el-input>
           </el-col>
+          <el-col :span="24">
+            <el-tag type="warning" :style="tagStyle">其他</el-tag>
+          </el-col>
+          <el-col :span="22">
+            <el-input type="textarea" disabled :autosize="{ minRows: 3, maxRows: 10}" placeholder="无"
+              v-model="onePerson.other">
+            </el-input>
+          </el-col>
+          <el-col :span="24">
+            <el-tag type="warning" :style="tagStyle">本科成绩单</el-tag>
+          </el-col>
+          <el-col :md="10" :sm="12" :xs="24" v-for="(itemUrl) in undergraduateGrade" :key="itemUrl">
+            <el-card :body-style="{ padding: '0px' }">
+              <img :src='httpUrl+"/masterImg/"+itemUrl' style="width: 100%;" @click="handlelargeImg(itemUrl)"/>
+              <div style="text-align: center;font-size: 18px; color: #909090;">
+               本科成绩单
+              </div>
+            </el-card>
+          </el-col>
         </el-row>
       </el-main>
     </el-container>
     <footerComponent></footerComponent>
+    <el-dialog :visible.sync="dialogVisibleImg" width="80%">
+      <img width="100%" :src="dialogImageUrl" alt="">
+    </el-dialog>
   </el-container>
 </template>
 <script>
@@ -116,6 +153,8 @@
     },
     data() {
       return {
+        dialogVisibleImg:false,
+        dialogImageUrl:'',
         tagStyle:{
           'margin-top':"10px",
           'margin-bottom':'10px',
@@ -129,10 +168,16 @@
       }
     },
     computed: {
+      undergraduateGrade(){
+        if(this.onePerson.undergraduateGrade){
+          return this.onePerson.undergraduateGrade
+        }
+        return ['0']
+      },
       selectTeachers() {
         if (this.onePerson) {
           return this.onePerson.teacherId.map((item) => {
-            return this.teacherList[item]
+            return this.teacherList[item-1]
           })
         }
         return []
@@ -168,6 +213,11 @@
       },
     },
     methods: {
+      handlelargeImg(filename){
+        console.log("11")
+        this.dialogVisibleImg=true
+        this.dialogImageUrl=this.httpUrl+"/masterImg/"+filename
+      },
       handlecurrentPage(val) {
         this.currentPage = val
       },
@@ -177,34 +227,34 @@
       }
     },
     beforeMount() {
-      this.$http.get(httpUrl+"/profile").then(
-            (reponse)=>{
-              if(reponse.body.errCode){ //后端数据库连接失败
-                  this.$router.push({name:"errorPage",params:{errorMessage:reponse.body}})
-                  return
-                }
-                if(reponse.body.authenticateThrought=="no"){
-                  this.$message({
-                    showClose: true,
-                    message: '没有权限访问，请登录后重试!',
-                    type: 'error',
-                  });
-                  setTimeout(()=>(this.$router.push({name:"loginPage"})),2000)
-                  return
-                }
-                if(reponse.body.authenticateThrought==="yes"){
-                  this.isLogin=true;
-                }
-            },
-            (errReponse)=>{
-              this.$message({
-                    showClose: true,
-                    message: '服务器开小差啦，请稍后重试!',
-                    type: 'error',
-                  });
-                return
-            }
-          )
+      // this.$http.get(httpUrl+"/profile").then(
+      //       (reponse)=>{
+      //         if(reponse.body.errCode){ //后端数据库连接失败
+      //             this.$router.push({name:"errorPage",params:{errorMessage:reponse.body}})
+      //             return
+      //           }
+      //           if(reponse.body.authenticateThrought=="no"){
+      //             this.$message({
+      //               showClose: true,
+      //               message: '没有权限访问，请登录后重试!',
+      //               type: 'error',
+      //             });
+      //             setTimeout(()=>(this.$router.push({name:"loginPage"})),2000)
+      //             return
+      //           }
+      //           if(reponse.body.authenticateThrought==="yes"){
+      //             this.isLogin=true;
+      //           }
+      //       },
+      //       (errReponse)=>{
+      //         this.$message({
+      //               showClose: true,
+      //               message: '服务器开小差啦，请稍后重试!',
+      //               type: 'error',
+      //             });
+      //           return
+      //       }
+      //     )
       this.$http.get(httpUrl + "/teacher").then(
         //success reponse
         (reponse) => {

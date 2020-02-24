@@ -18,7 +18,7 @@
       <el-popover placement="bottom"
       trigger="hover">
       <el-row>
-        <el-col :span="10"><router-link :to="{name:'profilePage',params:{name:account}}"><el-button type="success">用户中心</el-button></router-link></el-col>
+        <el-col :span="10"><router-link :to="{name:'showPage',params:{name:account}}"><el-button type="success">用户中心</el-button></router-link></el-col>
         <el-col :span="4"><el-divider direction="vertical"></el-divider></el-col>
         <el-col :span="10"><el-button type="danger" @click="logout">退出登录</el-button></el-col>
       </el-row >

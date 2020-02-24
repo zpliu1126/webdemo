@@ -11,7 +11,7 @@
         <el-form :model="input" ref="infoInput" :rules="rules" status-icon>
           <el-row>
             <el-col :md="6" :sm="20" :offset="4">
-              <el-upload class="avatar-uploader" :action='httpUrl+"/mster/img"' :show-file-list="false"
+              <el-upload class="avatar-uploader" :action='httpUrl+"/master/img"' :show-file-list="false"
                 :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
                 <img v-if="imageUrl" :src="imageUrl" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -35,6 +35,11 @@
                   </el-option>
                 </el-select>
               </el-form-item>
+              <el-form-item prop="home">
+                <el-input type="text" v-model.trim="input.home" size="large" class="el-input-prefix">
+                  <el-button slot="prepend">籍贯</el-button>
+                </el-input>
+              </el-form-item>
               <el-form-item prop="tel">
                 <el-input type="text" v-model.trim="input.tel" size="large" class="el-input-prefix">
                   <el-button slot="prepend">电话</el-button>
@@ -45,12 +50,23 @@
                   <el-button slot="prepend">本科毕业院校</el-button>
                 </el-input>
               </el-form-item>
+              <el-form-item prop="english">
+                <el-input type="text" v-model.trim="input.english" size="large" class="el-input-prefix" placeholder="CET6">
+                  <el-button slot="prepend">英语水平</el-button>
+                </el-input>
+              </el-form-item>
+              <el-form-item prop="computer">
+                <el-input type="text" v-model.trim="input.computer" size="large" class="el-input-prefix" placeholder="大学计算机二级">
+                  <el-button slot="prepend">计算机水平</el-button>
+                </el-input>
+              </el-form-item>
               <el-form-item prop="teacherId">
-                <el-select style="width:100%;" multiple filterable v-model="input.teacherId" placeholder="有意向的导师">
+                <el-select style="width:100%;" multiple filterable v-model="input.teacherId" placeholder="有意向的导师&&多选">
                   <el-option v-for="item in selectTeacher" :key="item.id" :label="item.teacher_name" :value="item.id">
                   </el-option>
                 </el-select>
               </el-form-item>
+
             </el-col>
           </el-row>
           <el-row>
@@ -127,6 +143,36 @@
             </el-col>
           </el-row>
           <el-row>
+            <el-col :span="24">
+              <el-tag type="warning" :style="tagStyle">其他</el-tag>
+            </el-col>
+            <el-col :span="20" :offset="2">
+              <el-form-item prop="other">
+                <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 10}" placeholder="请输入内容"
+                  v-model="input.other">
+                </el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-tag type="warning" :style="tagStyle">本科成绩单</el-tag>
+            </el-col>
+            <el-col :span="20" :offset="2">
+              <el-upload
+              class="upload-demo"
+              :action='httpUrl+"/master/img"'
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              :on-success="handleSuccessUpload"
+              :file-list="fileList"
+              list-type="picture">
+              <el-button size="small" type="primary">点击上传</el-button>
+              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            </el-upload>
+            </el-col>
+          </el-row>
+          <el-row>
             <el-col :span="20" :offset="2">
               <el-form-item>
                 <el-button style="width:100%" type="success" @click="handleInfo('infoInput')">提交</el-button>
@@ -137,6 +183,9 @@
       </el-col>
     </el-row>
     <footerComponent height="15%"></footerComponent>
+    <el-dialog :visible.sync="dialogVisibleImg">
+      <img width="100%" :src="dialogImageUrl" alt="">
+    </el-dialog>
     <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
       <span style="color: #67C23A;"><i class="el-icon-check"></i></span>
       <span>上传成功!</span>
@@ -185,6 +234,8 @@
           'font-size':'20px',
         },
         dialogVisible: false,
+        dialogVisibleImg:false,
+        dialogImageUrl:'',
         rules: {
           name: [{ validator: checkifNull, trigger: 'blur' }],
           school: [{ validator: checkifNull, trigger: 'blur' }],
@@ -194,6 +245,10 @@
           interest: [{ validator: checkifNull, trigger: 'blur' }],
           teacherId: [{ validator: checkifNull, trigger: 'blur' }],
           tel: [{ validator: checkifNull, trigger: 'blur' }],
+          other: [{ validator: checkifNull, trigger: 'blur' }],
+          home: [{ validator: checkifNull, trigger: 'blur' }],
+          computer: [{ validator: checkifNull, trigger: 'blur' }],
+          english: [{ validator: checkifNull, trigger: 'blur' }],
         },
         httpUrl,
         starsCount: 500,
@@ -212,12 +267,18 @@
           teacherId: '',
           tel: '',
           imgUrl: '',
+          other:'',
+          undergraduateGrade:[],
+          english:'',
+          computer:'',
+          home:'',
         },
         selectSex,
         course: '',
         grade: '',
         clock:'',
         totalTime:5,
+        fileList: [],
       }
     },
     computed: {
@@ -246,6 +307,27 @@
       )
     },
     methods: {
+      handleSuccessUpload(reponse,file){
+        this.input.undergraduateGrade.push(reponse.filename)
+      },
+      handleRemove(file, fileList) {
+        this.input.undergraduateGrade.forEach((item,index)=>{
+          if(item==file.response.filename){
+            this.input.undergraduateGrade.splice(index,1);
+          }
+        })
+        /*删除后端图片*/
+        this.$http.post(httpUrl + "/master/img/del", file.response, { emulateJSON: true }).then(
+        (reponse)=>{
+
+        },
+        (reponse)=>{}
+        )
+      },
+      handlePreview(file) {
+        this.dialogImageUrl=file.url
+        this.dialogVisibleImg=true
+      },
       handleClose() {
         return
         /*点击关闭对话框无效*/

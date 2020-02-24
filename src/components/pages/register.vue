@@ -12,7 +12,7 @@
     <el-container class="register-form">
       <el-row :span="24" justify="center" type="flex">
         <el-col :span="24">
-          <el-form :model="input" :rules="registerFormRules" status-icon ref="registerInput" status-icon>
+          <el-form :model="input" :rules="registerFormRules" status-icon ref="registerInput" >
             <el-form-item prop="name" >
               <el-input type="text" v-model.trim="input.name" size="large" placeholder="student ID" class="el-input-prefix">
                 <el-button slot="prepend">账户</el-button>

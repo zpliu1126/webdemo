@@ -25,6 +25,10 @@ app.use("/node_modules",express.static(path.resolve(__dirname,"node_modules")))
 app.get("/",function(req,rep){
   rep.render("index.html")
 })
+app.get("/master",function(req,rep){
+  rep.render("master.html")
+})
+
 
 app.all("*",function(req,rep,next){
   rep.header("Access-Control-Allow-Origin", "*");
