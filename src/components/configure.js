@@ -1,4 +1,4 @@
 module.exports={
-  httpUrl:"http://127.0.0.1",
+  httpUrl:"http://cotton.hzau.edu.cn/web",
   tmp:"http://cotton.hzau.edu.cn/web",
 }

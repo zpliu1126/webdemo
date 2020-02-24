@@ -2,7 +2,7 @@
   <el-container direction="vertical" id="messageShow">
     <headerComponent></headerComponent>
     <el-container class="container">
-      <el-aside width="200px">
+      <el-aside width="200px" class="hidden-sm-and-down">
         <h1><i class="el-icon-user-solid"></i>学生列表</h1>
         <el-menu default-active="0" @select="handleOnePersonSelect('selectMenu')" ref="selectMenu">
           <el-menu-item :index='index' v-for='(onePerson,index) in tmpArray' :key='index'>
@@ -17,15 +17,15 @@
       </el-aside>
       <el-main>
         <el-row>
-          <el-col :span="6">
+          <el-col :md="6" :sm="20" >
             <el-card :body-style="{ padding: '0px' }">
               <img :src='httpUrl+"/masterImg/"+onePerson.imgUrl' style="width: 100%;" />
-              <div>
+              <div style="text-align: center;font-size: 18px; color: #909090;">
                 大头贴
               </div>
             </el-card>
           </el-col>
-          <el-col :span="10">
+          <el-col :md="10" :sm="16" :xs="24" :offset="1">
             <el-form :model="onePerson" ref="infoOnePerson">
               <el-form-item prop="name">
                 <el-input type="text" v-model.trim="onePerson.name" disabled size="large" class="el-input-prefix">
@@ -38,26 +38,26 @@
                 </el-input>
               </el-form-item>
               <el-form-item prop="tel">
-                <el-input type="text" v-model.trim="onePerson.tel" size="large" class="el-input-prefix">
+                <el-input type="text" v-model.trim="onePerson.tel" disabled size="large" class="el-input-prefix">
                   <el-button slot="prepend">电话</el-button>
                 </el-input>
               </el-form-item>
               <el-form-item prop="school">
-                <el-input type="text" v-model.trim="onePerson.school" size="large" class="el-input-prefix">
+                <el-input type="text" v-model.trim="onePerson.school" disabled  size="large" class="el-input-prefix">
                   <el-button slot="prepend">本科毕业院校</el-button>
                 </el-input>
               </el-form-item>
             <el-form-item>
               <div class="tag-group">
-                <span class="tag-group_titile">意向导师</span>
-                <el-tag v-for="item in selectTeachers" :key="item.teacher_name" type="success" effect="dark">
+                <span class="tag-group_titile" style="font-size: 18px; margin-right: 10px;"><i class="el-icon-user-solid"></i>意向导师</span>
+                <el-tag style="margin-left: 10px;" v-for="item in selectTeachers" :key="item.teacher_name" type="success" effect="dark">
                   {{ item.teacher_name }}
                 </el-tag>
               </div>
             </el-form-item>
             <el-form-item prop="school">
-              <h1>考研各科成绩</h1>
-              <el-input v-for='(item,index) in onePerson.transcript' :key='index'
+              <h1>考研成绩</h1>
+              <el-input v-for='(item,index) in onePerson.transcript' disabled :key='index'
               type="text" :value="item.grade" size="large" class="el-input-prefix">
                 <el-button slot="prepend">{{item.course}}</el-button>
               </el-input>
@@ -67,34 +67,34 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-tag type="warning">科研经历</el-tag>
+            <el-tag type="warning" :style="tagStyle">科研经历</el-tag>
           </el-col>
           <el-col :span="22">
-            <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 10}" placeholder="请输入内容"
+            <el-input type="textarea" disabled :autosize="{ minRows: 3, maxRows: 10}" placeholder="无"
               v-model="onePerson.searchExperience">
             </el-input>
           </el-col>
           <el-col :span="24">
-            <el-tag type="warning">学生工作经历</el-tag>
+            <el-tag type="warning" :style="tagStyle">学生工作经历</el-tag>
           </el-col>
           <el-col :span="22">
-            <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 10}" placeholder="请输入内容"
+            <el-input type="textarea" disabled :autosize="{ minRows: 3, maxRows: 10}" placeholder="无"
               v-model="onePerson.studentExperience">
             </el-input>
           </el-col>
           <el-col :span="24">
-            <el-tag type="warning">荣誉及获奖情况</el-tag>
+            <el-tag type="warning" :style="tagStyle">荣誉及获奖情况</el-tag>
           </el-col>
           <el-col :span="22">
-            <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 10}" placeholder="请输入内容"
+            <el-input type="textarea" disabled :autosize="{ minRows: 3, maxRows: 10}" placeholder="无"
               v-model="onePerson.honor">
             </el-input>
           </el-col>
           <el-col :span="24">
-            <el-tag type="warning">个人兴趣爱好</el-tag>
+            <el-tag type="warning" :style="tagStyle">个人兴趣爱好</el-tag>
           </el-col>
           <el-col :span="22">
-            <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 10}" placeholder="请输入内容"
+            <el-input type="textarea" disabled :autosize="{ minRows: 3, maxRows: 10}" placeholder="无"
               v-model="onePerson.interest">
             </el-input>
           </el-col>
@@ -116,6 +116,11 @@
     },
     data() {
       return {
+        tagStyle:{
+          'margin-top':"10px",
+          'margin-bottom':'10px',
+          'font-size':'20px',
+        },
         httpUrl,
         teacherList: '',
         reponseArray: '',
@@ -172,6 +177,34 @@
       }
     },
     beforeMount() {
+      this.$http.get(httpUrl+"/profile").then(
+            (reponse)=>{
+              if(reponse.body.errCode){ //后端数据库连接失败
+                  this.$router.push({name:"errorPage",params:{errorMessage:reponse.body}})
+                  return
+                }
+                if(reponse.body.authenticateThrought=="no"){
+                  this.$message({
+                    showClose: true,
+                    message: '没有权限访问，请登录后重试!',
+                    type: 'error',
+                  });
+                  setTimeout(()=>(this.$router.push({name:"loginPage"})),2000)
+                  return
+                }
+                if(reponse.body.authenticateThrought==="yes"){
+                  this.isLogin=true;
+                }
+            },
+            (errReponse)=>{
+              this.$message({
+                    showClose: true,
+                    message: '服务器开小差啦，请稍后重试!',
+                    type: 'error',
+                  });
+                return
+            }
+          )
       this.$http.get(httpUrl + "/teacher").then(
         //success reponse
         (reponse) => {

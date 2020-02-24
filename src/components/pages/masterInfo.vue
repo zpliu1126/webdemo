@@ -10,12 +10,17 @@
       <el-col :md="18">
         <el-form :model="input" ref="infoInput" :rules="rules" status-icon>
           <el-row>
-            <el-col :md="6" :sm="24">
+            <el-col :md="6" :sm="20" :offset="4">
               <el-upload class="avatar-uploader" :action='httpUrl+"/mster/img"' :show-file-list="false"
                 :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
                 <img v-if="imageUrl" :src="imageUrl" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                <div slot="tip">上传头像</div>
+                <div slot="tip" style="
+                padding-left: 55px;
+                font-size: 15px;
+                color: #909399;
+                margin-top:10px;"
+                >上传头像</div>
               </el-upload>
             </el-col>
             <el-col :md="6" :sm="16" :xs="23">
@@ -41,7 +46,7 @@
                 </el-input>
               </el-form-item>
               <el-form-item prop="teacherId">
-                <el-select style="width:100%;" multiple filterable v-model="input.teacherId" placeholder="选择感兴趣的导师">
+                <el-select style="width:100%;" multiple filterable v-model="input.teacherId" placeholder="有意向的导师">
                   <el-option v-for="item in selectTeacher" :key="item.id" :label="item.teacher_name" :value="item.id">
                   </el-option>
                 </el-select>
@@ -51,33 +56,35 @@
           <el-row>
             <el-col :span="22">
               <el-col :span="24">
-                <el-tag type="warning">考研各科成绩</el-tag>
+                <el-tag type="warning" :style="tagStyle">考研成绩</el-tag>
               </el-col>
-              <el-col :span="10">
+              <el-col :md="6" :sm="20" :xs="23"  :offset="2">
                 <el-input v-model="course" placeholder="科目"></el-input>
               </el-col>
-              <el-col :span="10">
+              <el-col :md="6" :sm="20" :xs="23" :offset="2">
                 <el-input v-model="grade" placeholder="成绩"></el-input>
               </el-col>
-              <el-col :span="3">
-                <el-button @click="addCourse">新增科目</el-button>
+              <el-col :md="3" :sm="20" :xs="23" :offset="2">
+                <el-button @click="addCourse" type="primary">添加科目</el-button>
               </el-col>
-
-                <el-input v-for="(oneTranscript,index) in input.transcript" :key="oneTranscript.key"  v-if="oneTranscript.course" type="text" disabled v-model.trim="oneTranscript.grade"
-                  size="large" class="el-input-prefix">
-                  <el-button slot="prepend">{{oneTranscript.course}}</el-button>
-                </el-input>
+              <el-col :md="16" :sm="16" :xs="23" :offset="2">
+              <el-input v-for="(oneTranscript,index) in input.transcript" :key="oneTranscript.key"
+                v-if="oneTranscript.course" type="text" disabled v-model.trim="oneTranscript.grade" size="large"
+                class="el-input-prefix">
+                <el-button slot="prepend">{{oneTranscript.course}}</el-button>
+              </el-input>
+            </el-col>
 
             </el-col>
           </el-row>
 
           <el-row>
             <el-col :span="24">
-              <el-tag type="warning">科研经历</el-tag>
+              <el-tag type="warning" :style="tagStyle">科研经历</el-tag>
             </el-col>
-            <el-col :span="22">
+            <el-col :span="20" :offset="2">
               <el-form-item prop="searchExperience">
-                <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 10}" placeholder="请输入内容"
+                <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 10}" placeholder="简要叙述一下，大学期间所参与过的一些科研项目；毕业课题等"
                   v-model="input.searchExperience">
                 </el-input>
               </el-form-item>
@@ -85,11 +92,11 @@
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-tag type="warning">学生工作经历</el-tag>
+              <el-tag type="warning" :style="tagStyle">学生工作经历</el-tag>
             </el-col>
-            <el-col :span="22">
+            <el-col :span="20" :offset="2">
               <el-form-item prop="studentExperience">
-                <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 10}" placeholder="请输入内容"
+                <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 10}" placeholder="大学期间参与的学生工作"
                   v-model="input.studentExperience">
                 </el-input>
               </el-form-item>
@@ -97,9 +104,9 @@
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-tag type="warning">大学期间获奖情况</el-tag>
+              <el-tag type="warning" :style="tagStyle">大学期间获奖情况</el-tag>
             </el-col>
-            <el-col :span="22">
+            <el-col :span="20" :offset="2" >
               <el-form-item prop="honor">
                 <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 10}" placeholder="请输入内容"
                   v-model="input.honor">
@@ -109,9 +116,9 @@
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-tag type="warning">兴趣爱好与特长</el-tag>
+              <el-tag type="warning" :style="tagStyle">兴趣爱好与特长</el-tag>
             </el-col>
-            <el-col :span="22">
+            <el-col :span="20" :offset="2">
               <el-form-item prop="interest">
                 <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 10}" placeholder="请输入内容"
                   v-model="input.interest">
@@ -120,9 +127,9 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-col>
+            <el-col :span="20" :offset="2">
               <el-form-item>
-                <el-button type="success" @click="handleInfo('infoInput')">提交</el-button>
+                <el-button style="width:100%" type="success" @click="handleInfo('infoInput')">提交</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -130,15 +137,15 @@
       </el-col>
     </el-row>
     <footerComponent height="15%"></footerComponent>
-    <el-dialog
-    title="提示"
-    :visible.sync="dialogVisible"
-    width="30%">
-    <span style="color: #67C23A;"><i class="el-icon-check"></i>上传成功!</span>
-    <span slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="handleSuccessUpload">确定</el-button>
-    </span>
-  </el-dialog>
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+      <span style="color: #67C23A;"><i class="el-icon-check"></i></span>
+      <span>上传成功!</span>
+      <div>
+        {{clock}}s后将自动刷新当前浏览器窗口
+      </div>
+      <span slot="footer" class="dialog-footer">
+      </span>
+    </el-dialog>
   </el-container>
 
 </template>
@@ -172,7 +179,12 @@
         }
       ];
       return {
-        dialogVisible:true,
+        tagStyle:{
+          'margin-top':"10px",
+          'margin-bottom':'10px',
+          'font-size':'20px',
+        },
+        dialogVisible: false,
         rules: {
           name: [{ validator: checkifNull, trigger: 'blur' }],
           school: [{ validator: checkifNull, trigger: 'blur' }],
@@ -202,8 +214,10 @@
           imgUrl: '',
         },
         selectSex,
-          course: '',
-          grade: '',
+        course: '',
+        grade: '',
+        clock:'',
+        totalTime:5,
       }
     },
     computed: {
@@ -232,13 +246,27 @@
       )
     },
     methods: {
+      handleClose() {
+        return
+        /*点击关闭对话框无效*/
+      },
+      countDown(){
+          window.setTimeout(()=>{this.dialogVisible=false},5500)
+          window.setTimeout(()=>{location.reload()},5550)
+          let clockDown=window.setInterval(()=>{
+            this.totalTime--
+            this.clock=this.totalTime
+          },1000)
+      },
       handleInfo(ruleform) {
         if (this.input.transcript.length != 0) {
           this.$refs.infoInput.validate((valid) => {
             if (valid) {
-
               this.$http.post(httpUrl + "/master/info", this.input, { emulateJSON: true }).then(
-                (reponse) => { },
+                (reponse) => { 
+                  this.dialogVisible=true
+                  this.countDown()
+                },
                 (reponse) => { }
               )
               return

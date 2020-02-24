@@ -7,7 +7,7 @@
       ></i>
     </el-col>
     <el-col  :md="8"  :xs="20" :sm="20" >
-      <div id="logo"><span>{{title}}</span></div>
+      <div id="logo"><router-link to="/"><span>{{title}}</span></router-link></div>
     </el-col>
     <el-col  class="hidden-sm-and-down" :span="8" :offset="4" >
     <el-menu :default-active="activeIndex" mode="horizontal"
@@ -45,11 +45,11 @@
        <el-tag type="info" style="width:100%" v-if="!isLogin"><el-link :style="menueCss" href="http://cotton.hzau.edu.cn/teacher.php?cid=7">关于我们</el-link></el-tag>
        <el-tag type="info" style="width:100%" v-if="!isLogin"><router-link :style="menueCss" to="/login">登录</router-link></el-tag>
       </el-collapse-item>
-      <el-collapse-item name="2" :disabled="!isLogin" >
+      <el-collapse-item name="2" :disabled="isLogin" >
        <template slot="title">
-        <span :style="menueCss"><i class="el-icon-s-custom"></i>用户中心</span>
+        <span :style="menueCss"><i class="el-icon-s-custom"></i>学生列表</span>
        </template>
-       <el-tag type="info" style="width:100%"><router-link :style="menueCss" :to="{name:'profilePage',params:{name:account}}">用户中心</router-link></el-tag>
+       <el-tag type="info" style="width:100%"><router-link :style="menueCss" :to="{name:'profilePage',params:{name:account}}"></router-link></el-tag>
        <el-tag type="info" style="width:100%"><el-link :style="menueCss" @click="$emit('page-change','primer')">primer</el-link></el-tag>
       </el-collapse-item>
     </el-collapse>
