@@ -85,9 +85,41 @@ body > .el-container[data-v-c2ce7532]{
 }
 .el-container[data-v-c2ce7532]{
     height: 100%;
-    background-image: url(https://imgchr.com/content/images/system/home_cover_1552414407320_3a5f92.jpg);
+    /* background-image: url(https://imgchr.com/content/images/system/home_cover_1552414407320_3a5f92.jpg);
     background-repeat: repeat;
-    background-size: cover;
+    background-size: cover; */
+    background: radial-gradient(200% 100% at bottom center, #f7f7b6, #e96f92, #75517d, #1b2947);
+    background: radial-gradient(220% 105% at top center, #1b2947 10%, #75517d 40%, #e96f92 65%, #f8c291);
+    background-attachment: fixed;
+    overflow: hidden;
+}
+@keyframes rotate-data-v-c2ce7532 {
+0% {
+                transform: perspective(400px) rotateZ(20deg) rotateX(-40deg) rotateY(0);
+}
+100% {
+                transform: perspective(400px) rotateZ(20deg) rotateX(-40deg) rotateY(-360deg);
+}
+}
+.stars[data-v-c2ce7532] {
+            transform: perspective(500px);
+            transform-style: preserve-3d;
+            position: absolute;
+            bottom: 0;
+            perspective-origin: 50% 100%;
+            left: 50%;
+            animation: rotate-data-v-c2ce7532 90s infinite linear;
+}
+.star[data-v-c2ce7532] {
+            width: 2px;
+            height: 2px;
+            background: #F7F7B6;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: 0 0 -300px;
+            transform: translate3d(0, 0, -300px);
+            backface-visibility: hidden;
 }
 
 body>.el-container[data-v-3b35cf42] {
@@ -171,7 +203,6 @@ img[data-v-3b4238c6]{
   align-items: center;
 }
 
-
 body > #register[data-v-c4de10c4]{
     height: 100%;
     width: 100%;
@@ -183,9 +214,13 @@ body > #register[data-v-c4de10c4]{
 #register[data-v-c4de10c4]{
     height: 100%;
     width: 100%;
-    background-image: url(http://cotton.hzau.edu.cn/primer/public/img/register.jpg);
+    /* background-image: url(http://cotton.hzau.edu.cn/primer/public/img/register.jpg);
     background-repeat: repeat;
-    background-size: cover;
+    background-size: cover; */
+    background: radial-gradient(200% 100% at bottom center, #f7f7b6, #e96f92, #75517d, #1b2947);
+    background: radial-gradient(220% 105% at top center, #1b2947 10%, #75517d 40%, #e96f92 65%, #f8c291);
+    background-attachment: fixed;
+    overflow: hidden;
 }
 .register-form[data-v-c4de10c4]{
     height: 60%;
@@ -199,4 +234,31 @@ body > #register[data-v-c4de10c4]{
   display: inherit;
   justify-content: center;
 }
-
+@keyframes rotate-data-v-c4de10c4 {
+0% {
+                transform: perspective(400px) rotateZ(20deg) rotateX(-40deg) rotateY(0);
+}
+100% {
+                transform: perspective(400px) rotateZ(20deg) rotateX(-40deg) rotateY(-360deg);
+}
+}
+.stars[data-v-c4de10c4] {
+            transform: perspective(500px);
+            transform-style: preserve-3d;
+            position: absolute;
+            bottom: 0;
+            perspective-origin: 50% 100%;
+            left: 50%;
+            animation: rotate-data-v-c4de10c4 90s infinite linear;
+}
+.star[data-v-c4de10c4] {
+            width: 2px;
+            height: 2px;
+            background: #F7F7B6;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: 0 0 -300px;
+            transform: translate3d(0, 0, -300px);
+            backface-visibility: hidden;
+}

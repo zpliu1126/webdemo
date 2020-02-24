@@ -60,13 +60,20 @@
 </div>
 </template>
 <script>
+import confVar from './configure.js'
+  var httpUrl = confVar.httpUrl
   export default{
     data() {
+      let  ElementUIUrl=httpUrl+"/public/img/icon/element.svg";
+      let  mysqlUrl=httpUrl+"/public/img/icon/mysql.jpg";
+      let  vueUrl=httpUrl+"/public/img/icon/vue.png";
+      let  nodeUrl=httpUrl+"/public/img/icon/node.svg";
+
       return {
-        ElementUIUrl:"http://127.0.0.1/public/img/icon/element.svg",
-        mysqlUrl:"http://127.0.0.1/public/img/icon/mysql.jpg",
-        vueUrl:"http://127.0.0.1/public/img/icon/vue.png",
-        nodeUrl:"http://127.0.0.1/public/img/icon/node.svg",
+        ElementUIUrl,
+        mysqlUrl,
+        vueUrl,
+        nodeUrl,
         iconWrap:{
           "font-size":"2rem",
           "margin-top":"10px",

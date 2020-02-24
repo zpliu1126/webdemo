@@ -6,6 +6,7 @@ var bodyParser=require("body-parser")
 var searchRouter=require(path.join(__dirname,"API/search.js"))
 var loginRouter=require(path.join(__dirname,"API/login.js"))
 var registerRouter=require(path.join(__dirname,"API/register.js"))
+var masterInfoRouter=require(path.join(__dirname,"API/masterInfo.js"))
 
 var cookieParser=require("cookie-parser")
 app.use(bodyParser.json())
@@ -17,6 +18,7 @@ app.engine("html",require("express-art-template"))
 
 // open static resource 
 app.use("/public",express.static(path.resolve(__dirname,"public")))
+app.use("/masterImg",express.static(path.resolve(__dirname,"uploads/masterImg/")))
 app.use("/node_modules",express.static(path.resolve(__dirname,"node_modules")))
 
 /* home page render */
@@ -34,6 +36,7 @@ app.all("*",function(req,rep,next){
 app.use(searchRouter)
 app.use(loginRouter)
 app.use(registerRouter)
+app.use(masterInfoRouter)
 
 /*########################*/
 //err page

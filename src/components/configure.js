@@ -1,4 +1,4 @@
 module.exports={
-  httpUrl:"http://cotton.hzau.edu.cn/primer",
-  tmp:"http://cotton.hzau.edu.cn/primer",
+  httpUrl:"http://127.0.0.1",
+  tmp:"http://cotton.hzau.edu.cn/web",
 }

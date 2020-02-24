@@ -8,7 +8,8 @@
             <el-button  @click="onSubmit('input')"  slot="append" icon="el-icon-search"></el-button>
            </el-input>
          </el-form-item>
-         <el-form-item label="Accurate Search" prop="rule">
+         <el-form-item   prop="rule">
+          <div slot="label"><span style="color:aliceblue">Accurate Search</span></div>
           <el-switch activate-value="true" inactivate-value="false" active-color="#13ce66"  v-model="input.rule"></el-switch>
          </el-form-item>
        </el-form>

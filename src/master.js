@@ -5,13 +5,13 @@ import vueRouter from 'vue-router'
 
 import "element-ui/lib/theme-chalk/index.css"
 import 'element-ui/lib/theme-chalk/display.css';
-import router from './router/index.js'
+import router from './router/master.js'
 import VueCookies from 'vue-cookies'
 
 Vue.use(VueCookies)
 Vue.use(vueRouter)
 
-import App from "./App.vue"
+import App from "./master.vue"
 
 
 Vue.use(ElementUI)

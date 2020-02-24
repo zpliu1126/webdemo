@@ -6,15 +6,15 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
 
 module.exports={
-  entry: path.join(__dirname,"/src/main.js"),
+  entry: path.join(__dirname,"/src/master.js"),
 
   output:{
       path:path.join(__dirname,"/public"),
-      filename:"bundle.js"
+      filename:"master.js"
   },
   resolve:{
     alias:{
-        vue$:path.join(__dirname,"/node_modules/vue/dist/vue.min.js")
+        vue$:path.join(__dirname,"/node_modules/vue/dist/vue.js")
     }
   },
   module:{
@@ -42,7 +42,7 @@ module.exports={
 
   plugins:[
     new VueLoaderPlugin(),
-    new ExtractTextPlugin("styles.css"),
+    new ExtractTextPlugin("master.css"),
     new UglifyJsPlugin({
       parallel: 4,
       uglifyOptions: {
