@@ -168,7 +168,7 @@
               :file-list="fileList"
               list-type="picture">
               <el-button size="small" type="primary">点击上传</el-button>
-              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件</div>
             </el-upload>
             </el-col>
           </el-row>
@@ -341,27 +341,84 @@
           },1000)
       },
       handleInfo(ruleform) {
-        if (this.input.transcript.length != 0) {
-          this.$refs.infoInput.validate((valid) => {
-            if (valid) {
-              this.$http.post(httpUrl + "/master/info", this.input, { emulateJSON: true }).then(
-                (reponse) => { 
-                  this.dialogVisible=true
-                  this.countDown()
-                },
-                (reponse) => { }
-              )
-              return
-            }
-
-          })
-        } else {
-          this.$message({
-            showClose: true,
-            message: '请填写考研各科成绩',
-            type: 'error',
-          });
+        let validateMessage=function(_this){
+          if(_this.input.transcript.length == 0){
+            return 1
+          }
+          if(_this.input.imgUrl==''){
+            return 0
+          }
+          if(_this.input.teacherId.length == 0){
+            return 2
+          }
+          if(_this.input.undergraduateGrade.length==0){
+            return 3
+          }
+            return 4
         }
+        console.log(validateMessage(this))
+        switch(validateMessage(this)){
+          case 1:
+            this.$message({
+              showClose: true,
+              message: '请填写考研各科成绩',
+              type: 'error',
+            });
+            break
+          case 0:
+            this.$message({
+                showClose: true,
+                message: '请上传头像',
+                type: 'error',
+              });
+              break
+          case 2:
+            this.$message({
+                showClose: true,
+                message: '请选择导师',
+                type: 'error',
+              });
+              break
+          case 3:
+            this.$message({
+                showClose: true,
+                message: '请上传本科成绩单',
+                type: 'error',
+              });
+              break
+          case 4:
+            this.$refs.infoInput.validate((valid) => {
+              if (valid) {
+                this.$http.post(httpUrl + "/master/info", this.input, { emulateJSON: true }).then(
+                  (reponse) => {
+                    if(reponse.body=="ok"){
+                    this.dialogVisible=true
+                    this.countDown()
+                    }else{
+                      this.$message({
+                    showClose: true,
+                    message: '上传失败，请联系管理员qq:1944532210',
+                    type: 'error',
+                  });
+                    }
+                  },
+                  (reponse) => {
+                    this.$message({
+                    showClose: true,
+                    message: '服务器开小差啦！稍后再试',
+                    type: 'error',
+                  });
+                  }
+                )
+          }});
+          break
+        default :
+          this.$message({
+                  showClose: true,
+                  message: '请填写完整信息',
+                  type: 'error',
+            });
+      }
       },
       addCourse() {
         if (this.grade && this.course) {

@@ -227,34 +227,34 @@
       }
     },
     beforeMount() {
-      // this.$http.get(httpUrl+"/profile").then(
-      //       (reponse)=>{
-      //         if(reponse.body.errCode){ //后端数据库连接失败
-      //             this.$router.push({name:"errorPage",params:{errorMessage:reponse.body}})
-      //             return
-      //           }
-      //           if(reponse.body.authenticateThrought=="no"){
-      //             this.$message({
-      //               showClose: true,
-      //               message: '没有权限访问，请登录后重试!',
-      //               type: 'error',
-      //             });
-      //             setTimeout(()=>(this.$router.push({name:"loginPage"})),2000)
-      //             return
-      //           }
-      //           if(reponse.body.authenticateThrought==="yes"){
-      //             this.isLogin=true;
-      //           }
-      //       },
-      //       (errReponse)=>{
-      //         this.$message({
-      //               showClose: true,
-      //               message: '服务器开小差啦，请稍后重试!',
-      //               type: 'error',
-      //             });
-      //           return
-      //       }
-      //     )
+      this.$http.get(httpUrl+"/profile").then(
+            (reponse)=>{
+              if(reponse.body.errCode){ //后端数据库连接失败
+                  this.$router.push({name:"errorPage",params:{errorMessage:reponse.body}})
+                  return
+                }
+                if(reponse.body.authenticateThrought=="no"){
+                  this.$message({
+                    showClose: true,
+                    message: '没有权限访问，请登录后重试!',
+                    type: 'error',
+                  });
+                  setTimeout(()=>(this.$router.push({name:"loginPage"})),2000)
+                  return
+                }
+                if(reponse.body.authenticateThrought==="yes"){
+                  this.isLogin=true;
+                }
+            },
+            (errReponse)=>{
+              this.$message({
+                    showClose: true,
+                    message: '服务器开小差啦，请稍后重试!',
+                    type: 'error',
+                  });
+                return
+            }
+          )
       this.$http.get(httpUrl + "/teacher").then(
         //success reponse
         (reponse) => {
