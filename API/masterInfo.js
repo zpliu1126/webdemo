@@ -20,7 +20,7 @@ function addMessage(body, callback) {
     return element.grade + "_" + element.course
   }).join("*")
   let teacherId = body.teacherId.join("*")
-  let undergraduateGrade=body.undergraduateGrade.join("*")
+  let undergraduateGrade=body.undergraduateGrade ? body.undergraduateGrade.join("*") : ''
   poolConnection.getConnection(function (err, connection) {
     if (err) {
       callback(errorCategory.mysql.connection)//error category
@@ -36,6 +36,7 @@ function addMessage(body, callback) {
    "${body.studentExperience}","${body.searchExperience}","${body.imgUrl}",
    "${body.english}","${body.computer}","${body.home}","${body.other}","${undergraduateGrade}")
  `
+  console.log(sql)
     connection.query(sql, function (err, result, fields) {
       if (err && err.errno == 1062) {
         callback(errorCategory.mysql.Duplicateaccount); //error category
