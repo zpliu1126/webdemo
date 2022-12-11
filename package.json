@@ -19,7 +19,7 @@
     "cookie-parser": "^1.4.4",
     "css-loader": "^3.4.2",
     "element-ui": "^2.13.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-art-template": "^1.0.1",
     "md5": "^2.2.1",
     "mint-ui": "^2.2.13",
